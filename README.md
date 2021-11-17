@@ -1,6 +1,5 @@
 # Discord.js Bot Framework
-A discord.js bot skeleton/framework, made with slash commands in mind. Pulled from Bruni's Utilites' node.js port source code.  
-Have fun making your own Discord bot!  
+A discord.js bot skeleton/framework, made with slash commands in mind. Have fun making your own Discord bot!  
 *Note: Only the base framework used to make the bot is included. If you'd like to add your own commands, refer to [this guide](https://discordjs.guide/interactions/registering-slash-commands.html).*
 ## Installation/Deployment
 ### Prerequisites
