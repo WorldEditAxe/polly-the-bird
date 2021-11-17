@@ -12,11 +12,7 @@ Have fun making your own Discord bot!
 `discord.js` >= 13.2.0  
 `dotenv` >= 10.0.0  
 `typescript` >= 4.4.3    
-#### Optional
-*These dependencies are not required but are here for the sole purpose of speeding up the bot.*  
-`bufferutil` >= 4.0.4  
-`utf-8-validate` >= 5.0.6  
-`zlib-sync` >= 0.1.7  
+  
 *These dependencies can be installed by running `npm install` with the exception of typescript. Install TS by running `npm install typescript --save-dev`.*  
 ### Installation/How to run
 1. Run `npm install` and `npm install typescript --save-dev` to install required dependencies.  
