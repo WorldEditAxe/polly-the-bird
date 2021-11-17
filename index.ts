@@ -157,7 +157,7 @@ async function regCommands(guildId?: string) {
         await rest.put(route, { body: cmdJson })
             .catch(reason => {
                 throw new Error("Failed to register slash commands globally! Error: "
-                    + reason)
+                    + reason) })
             })
     }
 }
