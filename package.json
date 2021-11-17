@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@types/node": "^16.10.3",
+    "bufferutil": "^4.0.4",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.3.0",
+    "dotenv": "^10.0.0",
+    "erlpack": "github:discord/erlpack",
+    "utf-8-validate": "^5.0.6",
+    "zlib-sync": "^0.1.7"
+  },
+  "name": "Bot",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WiggleGiggle/brunis-utilities-v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WiggleGiggle/brunis-utilities-v2/issues"
+  },
+  "homepage": "https://github.com/WiggleGiggle/brunis-utilities-v2#readme",
+  "description": "Official port of [__**Bruni's Utilities**__](https://github.com/WiggleGiggle/Brunis-Utilities) from Python to node.js as discord.py has been discontinued.",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  }
+}
