@@ -23,7 +23,6 @@ Have fun making your own Discord bot!
 2. Create an environment file (.env) with the following content:  
 ```
 TOKEN="" // Insert token here.
-CLIENT_ID= // Client ID of bot.
 DEV_GUILD_ID= // The development guild's ID. This is where commands are deployed to when bot is not in production mode.
 IS_PRODUCTION= // Whether the bot is running in production mode. Bots running in non-production mode will have all their commands updated to the development guild.
 ```  
