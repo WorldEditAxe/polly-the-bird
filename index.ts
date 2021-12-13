@@ -158,7 +158,6 @@ async function regCommands(guildId?: string) {
             .catch(reason => {
                 throw new Error("Failed to register slash commands globally! Error: "
                     + reason) })
-            })
     }
 }
 
