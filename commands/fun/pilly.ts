@@ -11,6 +11,5 @@ export async function execute(i: CommandInteraction) {
                 + "\n*Pilly:* no u"
                 + "\nPilly proceeds to pull out his UNO®️ reverse card and beats his ass, killing him in the progress."
                 + "\n*Polly:* nOOoOooOoOO yOu cAn'T uSe A uNo®️ rEverSe cAr-"
-                + "\n*Pilly:* DIE BITCH DEI  DIEDIE0D JEIDJEIDJEIDJEI DJE"
-                + "\nK.O. bitches")
+                + "\n*Pilly:* DIE BITCH DEI  DIEDIE0D JEIDJEIDJEIDJEI DJE")
 }
