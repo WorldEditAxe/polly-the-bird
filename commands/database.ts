@@ -1,5 +1,5 @@
 import { Db, MongoClient } from "mongodb";
-import { EventEmitter } from "stream";
+import { EventEmitter } from "node:events";
 
 const events = new EventEmitter()
 

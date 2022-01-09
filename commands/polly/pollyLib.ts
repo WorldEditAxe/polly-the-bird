@@ -48,28 +48,30 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
     })
 
     collector.on('end', async () => {
-        if (cookies <= 0) await chan.send(`polly says 0 cracker too little. polly want feed!!!! POLLY WANTES FEDEEDRD`)
-        else await chan.send(`Someone fed Polly, good job! Polly is happy and has ${cookies} cracker(s) :D`)
-
-        await msg.edit({ embeds: [
-            new MessageEmbed()
-                .setTitle('POLLY IS FULL')
-                .setColor('GREEN')
-                .setDescription(cookies > 0 ? `POLLY HAS BEEN FED AND NOW HAS ${cookies} CRACKER(S) <:polly:928461448844300299>`
-                                             : `POLLY HAS NO CRACKER. POLLY WANT CRACKER. <:polly:928461448844300299>`)
-                .setFooter('Give Polly more crackers or else')
-                .setTimestamp()
-        ],
-        components: [   
-            new MessageActionRow()
-                .addComponents(new MessageButton()
-                    .setCustomId(`no moar cracker`)
-                    .setDisabled(true)
-                    .setEmoji('928484406266581003')
-                    .setStyle('SUCCESS')
-                )
-        ]
-        })
+        try {
+            if (cookies <= 0) await chan.send(`polly says 0 cracker too little. polly want feed!!!! POLLY WANTES FEDEEDRD`)
+            else await chan.send(`Someone fed Polly, good job! Polly is happy and has ${cookies} cracker(s) :D`)
+    
+            await msg.edit({ embeds: [
+                new MessageEmbed()
+                    .setTitle('POLLY IS FULL')
+                    .setColor('GREEN')
+                    .setDescription(cookies > 0 ? `POLLY HAS BEEN FED AND NOW HAS ${cookies} CRACKER(S) <:polly:928461448844300299>`
+                                                 : `POLLY HAS NO CRACKER. POLLY WANT CRACKER. <:polly:928461448844300299>`)
+                    .setFooter('Give Polly more crackers or else')
+                    .setTimestamp()
+            ],
+            components: [   
+                new MessageActionRow()
+                    .addComponents(new MessageButton()
+                        .setCustomId(`no moar cracker`)
+                        .setDisabled(true)
+                        .setEmoji('928484406266581003')
+                        .setStyle('SUCCESS')
+                    )
+            ]
+            })
+        } catch {  }
     })
 }
 
