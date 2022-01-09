@@ -3,8 +3,9 @@ import { CommandInteraction, MessageEmbed } from 'discord.js'
 import * as https from 'node:https'
 
 let memeCache: Array<any>
-const uri = 'https://www.reddit.com/r/memes/top.json?count=100'
+const uri = '   '
 const wait = ms => new Promise<void>(res => setTimeout(res, ms))
+let errored = false
 
 async function fetch(url: string) {
     const options = { headers: { 'User-Agent': `Polly/1.0 (POLLY SAYS HI)` } } 
@@ -39,6 +40,7 @@ export const slashCommand = new SlashCommandBuilder()
     .setDescription('gimme some of that juicy memes from Reddit')
 
 export async function execute(i: CommandInteraction) {
+    if (errored) return await i.reply({ content: "The command appears to be broken... maybe try again later?", ephemeral: true })
     const index = Math.floor(Math.random() * memeCache.length)
     const meme: { name: string, author: string, media: string } = memeCache[index]
 
@@ -46,7 +48,6 @@ export async function execute(i: CommandInteraction) {
         embeds: [
             new MessageEmbed()
                 .setColor('#e1eb34')
-                .setAuthor(meme.author)
                 .setTitle(meme.name)
                 [meme.media.startsWith('https://v.redd.it') ? 'setDescription' : 'setImage'](meme.media.startsWith('https://v.redd.it') ? `[<offsite video>](${meme.media})` : meme.media)
                 .setTimestamp()
@@ -56,8 +57,12 @@ export async function execute(i: CommandInteraction) {
 
 // loop
 async function loop() {
-    memeCache = parse(await fetch(uri))
-    await wait(60 * 1000 * 60 * 1)
+    while (true) {
+        try { memeCache = parse(await fetch(uri)) }
+        catch { errored = true; break; }
+
+        await wait(60 * 1000 * 60 * 1)
+    }
 }
 
 export async function staticBlock() {
