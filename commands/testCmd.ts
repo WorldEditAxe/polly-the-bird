@@ -22,7 +22,7 @@ export const preprocessorOptions = new CommandPreprocessor({
     botPermissions: [Permissions.FLAGS.SEND_MESSAGES],
 
     // Set this to true if the command can only be used in a server.
-    serverOnly: false,
+    serverOnly: true,
 
     // Set this to true if you want to save the cooldown in the database.
     // This just saves the cooldown data to either SQLite or MongoDB (can be changed in environment variables!)
