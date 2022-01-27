@@ -6,9 +6,11 @@
     "@types/node": "^16.10.3",
     "better-sqlite3": "^7.4.5",
     "bufferutil": "^4.0.4",
+    "chalk": "^5.0.0",
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.3.0",
     "dotenv": "^10.0.0",
+    "mongodb": "^4.3.1",
     "utf-8-validate": "^5.0.6"
   },
   "name": "Bot",
