@@ -6,7 +6,7 @@ import { Logger, verboseLogging } from "./lib/logger.js"
 import { SlashCommandBuilder } from "@discordjs/builders"
 import { Routes } from "discord-api-types/v9"
 import { randomUUID } from "crypto"
-import { commandPreprocessor } from "./lib/preprocessor/commandPreprocessor.js"
+import { CommandPreprocessor } from "./lib/preprocessor/commandPreprocessor.js"
 import { preprocess } from "./lib/preprocessor/preprocessor.js"
 import { init } from "./lib/preprocessor/cooldownDb.js"
 dotenv.config()
@@ -22,8 +22,8 @@ let token = process.env.TOKEN
 const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 const logger: Logger = new Logger("INDEX")
 const commandMap: Map<SlashCommandBuilder, any> = new Map<SlashCommandBuilder, any>()
-const privateCommandMap: Map<string, { execute: Function, slashCommand: SlashCommandBuilder, preprocessor?: commandPreprocessor }[]> = new Map()
-const preprocessorMap: Map<string, commandPreprocessor> = new Map<string, commandPreprocessor>()
+const privateCommandMap: Map<string, { execute: Function, slashCommand: SlashCommandBuilder, preprocessor?: CommandPreprocessor }[]> = new Map()
+const preprocessorMap: Map<string, CommandPreprocessor> = new Map<string, CommandPreprocessor>()
 
 
 const startTimer: number = Date.now()
@@ -208,6 +208,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 
     if (interaction.guild) {
         const guildCmds = privateCommandMap.get(interaction.guild.id)
+        if (!guildCmds) return
 
         for (const cmd of guildCmds) {
             if (interaction.commandName == cmd.slashCommand.name) {
