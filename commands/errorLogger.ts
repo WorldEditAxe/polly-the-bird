@@ -1,6 +1,6 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
 
-const  webhook = new WebhookClient({ url: "https://discord.com/api/webhooks/936464227244318811/cUDTQI8ceQhOHK_LNgE9x7n1Xlj8uukkD3-Jfqvd0hPUtMp0EfOf9HRArdUcg9Y4MotF" })
+const webhook = new WebhookClient({ url: "https://discord.com/api/webhooks/936464227244318811/cUDTQI8ceQhOHK_LNgE9x7n1Xlj8uukkD3-Jfqvd0hPUtMp0EfOf9HRArdUcg9Y4MotF" })
 
 process.on('unhandledRejection', async e => {
     await webhook.send({

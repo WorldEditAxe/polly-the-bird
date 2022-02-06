@@ -19,23 +19,23 @@ export class Logger {
     }
 
     info(s: string) {
-        console.log(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgBlue('INFO')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stdout.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgBlue('INFO')}${color.gray('] - ')}${color.reset(s)}\n`)
     } 
 
     warn(s: string) {
-        console.log(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgYellowBright('WARN')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgYellowBright('WARN')}${color.gray('] - ')}${color.reset(s)}\n`)
     } 
 
     error(s: string) {
-        console.log(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgRedBright('ERROR')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgRedBright('ERROR')}${color.gray('] - ')}${color.reset(s)}\n`)
     } 
 
     fatal(s: string) {
-        console.log(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgRed('FATAL')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgRed('FATAL')}${color.gray('] - ')}${color.reset(s)}\n`)
     } 
 
     debug(s: string) {
         if (!this.verbose) return
-        console.log(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgGray('DEBUG')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgGray('DEBUG')}${color.gray('] - ')}${color.reset(s)}`)
     } 
 }

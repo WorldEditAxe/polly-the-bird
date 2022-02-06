@@ -1,6 +1,4 @@
-import { time } from "console"
-import { randomUUID } from "crypto"
-import { Client, MessageActionRow, MessageButton, MessageEmbed, TextChannel, User } from "discord.js"
+import { Client, MessageEmbed, TextChannel, User } from "discord.js"
 import { lockDown } from "./lockdown.js"
 
 let heistMode = false
@@ -34,17 +32,17 @@ cachedHeistEmbed
 
 client.on('guildMemberAdd', async m => {
     if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown) return
+
     if (!heistMode) {
         // no heist mode 
-        const welcomedUsers = new Array<string>()
         let embString = str + ''
 
         embString += `Account Creation: <t:${Math.ceil(m.user.createdTimestamp / 1000)}:R>\n`
         embString += `User ID: ${m.user.id}`
 
-        const msg = await chan.send({
+        await chan.send({
             embeds: [
-                new MessageEmbed()
+                new MessageEmbed()  
                     .setTitle(`Welcome to __**Dank Merchants**__!`)
                     .setColor('#39c212')
                     .setThumbnail(m.user.displayAvatarURL({ dynamic: true }))

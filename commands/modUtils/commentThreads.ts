@@ -19,7 +19,7 @@ export async function staticBlock() {
     client.on('messageCreate', async m => {
         if (m.channel.id == chanId && pingIds.some(element => m.mentions.has(element))) {
             try {
-                const thread = await m.startThread({ name: 'Comments', autoArchiveDuration: 'MAX', reason: "Comment thread for staff shitpost | Automated action." })
+                const thread = await m.startThread({ name: 'Comments', autoArchiveDuration: 1440, reason: "Comment thread for staff shitpost | Automated action." })
                 await thread.send({
                     embeds: [
                         new MessageEmbed()

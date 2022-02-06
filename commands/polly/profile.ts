@@ -34,6 +34,6 @@ export async function execute(i: CommandInteraction) {
                 { name: 'Event Donations', value: stringize(info.events), inline: true },
                 { name: 'Special Donations', value: stringize(info.special), inline: true },
                 { name: 'Money Donations', value: stringize(info.money, true), inline: true },
-                { name: 'Total', value: stringize(cumulativeTotal), inline: true })
+                { name: 'Total (excluding money)', value: stringize(cumulativeTotal), inline: true })
     ] })
 }

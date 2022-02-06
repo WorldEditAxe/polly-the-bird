@@ -3,7 +3,7 @@ import { awaitStart, getDb } from "../database.js";
 
 export const eventBindings = new EventEmitter()
 await awaitStart()
-const db = (await getDb('donations')).collection('donations')
+export const db = (await getDb('donations')).collection('donations')
 
 export const schema = {
     user_id: "",

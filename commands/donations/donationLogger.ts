@@ -14,8 +14,8 @@ donations.on('add', async (userId: string, type:  'GIVEAWAYS' | 'HEISTS' | 'EVEN
             new MessageEmbed()
                 .setTitle('Donation Update')
                 .setTimestamp()
-                .setFooter(`Manager: ${mod.tag}`)
-                .setColor(target.id == mod.id ? '#f00006' : '#fff422')
+                .setFooter({ text: `Manager: ${mod.tag}` })
+                .setColor('#3ca832')
                 .setDescription(target.id == mod.id ? `:warning: **SELF DONATION MODIFICATION** User modified their own donations, mad sus moment :warning:` : '')
                 .addFields(
                     { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
@@ -38,8 +38,8 @@ donations.on('remove', async (userId: string, type:  'GIVEAWAYS' | 'HEISTS' | 'E
             new MessageEmbed()
                 .setTitle('Donation Update')
                 .setTimestamp()
-                .setFooter(`Manager: ${mod.tag}`)
-                .setColor(target.id == mod.id ? '#f00006' : '#fff422')
+                .setFooter({ text: `Manager: ${mod.tag}` })
+                .setColor('#f03a07')
                 .setDescription(target.id == mod.id ? `:warning: **SELF DONATION MODIFICATION** User modified their own donations, mad sus moment :warning:` : '')
                 .addFields(
                     { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
@@ -61,8 +61,8 @@ donations.on('set', async (userId: string, type:  'GIVEAWAYS' | 'HEISTS' | 'EVEN
             new MessageEmbed()
                 .setTitle('Donation Update')
                 .setTimestamp()
-                .setFooter(`Manager: ${mod.tag}`)
-                .setColor(target.id == mod.id ? '#f00006' : '#fff422')
+                .setFooter({ text: `Manager: ${mod.tag}` })
+                .setColor('#0797f0')
                 .setDescription(target.id == mod.id ? `:warning: **SELF DONATION MODIFICATION** User modified their own donations, mad sus moment :warning:` : '')
                 .addFields(
                     { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
@@ -83,8 +83,8 @@ donations.on('delete', async (userId: string, moderator: string) => {
             new MessageEmbed()
                 .setTitle('Donation Update')
                 .setTimestamp()
-                .setFooter(`Manager: ${mod.tag}`)
-                .setColor(target.id == mod.id ? '#f00006' : '#fff422')
+                .setFooter({ text: `Manager: ${mod.tag}` })
+                .setColor('#f00006')
                 .setDescription(target.id == mod.id ? `:warning: **SELF DONATION MODIFICATION** User modified their own donations, mad sus moment :warning:` : '')
                 .addFields(
                     { name: 'User', value: `${target.tag} (${target.id})`, inline: true },

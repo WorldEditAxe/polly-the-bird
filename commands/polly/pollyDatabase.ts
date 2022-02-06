@@ -1,7 +1,7 @@
 import { Client } from "discord.js"
 import { MongoClient, Collection } from "mongodb"
 
-let cookieDb: Collection<Document>
+let cookieDb: Collection
 
 export const schema = {
     user_id: "0",

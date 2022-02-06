@@ -17,8 +17,8 @@ export const slashCommand = new SlashCommandBuilder()
 export async function execute(i: CommandInteraction) {
     // checks
     if (!i.guild) return await i.reply({ content: "No one's going to press F in a private channel lol, run it in server when", ephemeral: true })
-    if (!i.guild.me.permissionsIn(i.channel as GuildChannel).has(Permissions.FLAGS.SEND_MESSAGES)
-        || !i.guild.me.permissionsIn(i.channel as GuildChannel).has(Permissions.FLAGS.VIEW_CHANNEL)) return await i.reply({ content: "I can't send messages in this channel!", ephemeral: true })
+    if (!i.guild.me.permissionsIn(i.channel as any).has(Permissions.FLAGS.SEND_MESSAGES)
+        || !i.guild.me.permissionsIn(i.channel as any).has(Permissions.FLAGS.VIEW_CHANNEL)) return await i.reply({ content: "I can't send messages in this channel!", ephemeral: true })
 
     const fButtonI = `polly-pressf_${randomUUID()}`
         , filter = button => button.customId == fButtonI
