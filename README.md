@@ -28,3 +28,4 @@ IS_PRODUCTION= // Whether the bot is running in production mode. Bots running in
 1. Install TypeScript by running `npm install typescript --save-dev`.
 2. Run `tsc`. This will transpile the TypeScript code to JavaScript since node.js cannot directly execute TypeScript code.
 3. Go to the directory `dist` (`cd dist`) and then start the code (`node <fileName>.js` or in our case `node index.js`).
+# polly-deploy
