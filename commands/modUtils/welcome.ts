@@ -118,7 +118,7 @@ async function handleRoleInteraction(event: ButtonInteraction) {
                     hasRole = mbr.roles.cache.has('925228998492061806')
 
                     await mbr.roles[hasRole ? 'remove' : 'add']('925228998492061806')
-                    await event.editReply(hasRole ? "Removed the role 'events' from you." : "I gave you the role 'event'.")
+                    await event.editReply(hasRole ? "Removed the role 'events' from you." : "I gave you the role 'events'.")
                     break
                 case 'ar-giveaways':
                     hasRole = mbr.roles.cache.has('925237811144171621')
