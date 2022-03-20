@@ -1,0 +1,38 @@
+import { open } from "sqlite"
+import sqlite3 from 'sqlite3'
+import { schema, massInsert } from './donoDb.js';
+
+const i = msg => process.stdout.write(`[INFO] ${msg}\n`)
+
+export async function staticBlock() {
+    const db = await open({ filename: './donations.db', driver: sqlite3.Database })
+    const guildId = '784491141022220309'
+    const mappings = { 'giveaway': 'giveaways', 'heist': 'heists', 'event': 'events', 'special': 'special', 'money': 'money' }
+
+    i(`Fetching database entries on guild ${guildId}...`)
+    const ents = await (await db.prepare(`SELECT * FROM '${guildId}'`)).all()
+    i(`Fetched ${ents.length} entries, saving to MongoDB...`)
+
+    // schema-ize
+    const ins: typeof schema[] = []
+
+    ents.forEach(ent => {
+        const cloned = { ...schema }
+
+        cloned.user_id = ent.user_id
+        cloned.giveaways = ent.giveaway
+        cloned.heists = ent.heist
+        cloned.events = ent.event
+        cloned.special = ent.special
+        cloned.money = ent.money
+
+        ins.push(cloned)
+    })
+    
+    i(`Schemaized ${ins.length} entries, inserting into MongoDB...`)
+    await massInsert(ins)
+    await db.close()
+
+    process.exit(1)
+}
+
