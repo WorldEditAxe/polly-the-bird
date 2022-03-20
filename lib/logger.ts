@@ -36,6 +36,6 @@ export class Logger {
 
     debug(s: string) {
         if (!this.verbose) return
-        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgGray('DEBUG')}${color.gray('] - ')}${color.reset(s)}`)
+        process.stderr.write(`${color.gray('[')}${color.green(new Date().toISOString())}${color.gray('] [')}${color.reset(this.loggerName)}${color.gray('/')}${color.bgGray('DEBUG')}${color.gray('] - ')}${color.reset(s)}\n`)
     } 
 }

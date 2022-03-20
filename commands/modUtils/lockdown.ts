@@ -6,8 +6,9 @@ import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js"
 export let lockDown = false
 export function setLockdown(newValue: boolean) { lockDown = newValue }
 
-export const preprocessorOptions = new CommandPreprocessor({
-    cooldown: new CooldownDate({ minutes: 1 })
+export const preprocessor = new CommandPreprocessor({
+    cooldown: new CooldownDate({ minutes: 1 }),
+    serverOnly: true
 })
 
 export const slashCommand = new SlashCommandBuilder()

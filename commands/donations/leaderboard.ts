@@ -4,7 +4,7 @@ import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 import { currency_symbol, db, prettify, schema } from "./donoDb.js";
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 5 }),
     serverOnly: true
 })

@@ -1,14 +1,15 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
+import { Logger } from "../lib/logger.js";
 
-const webhook = new WebhookClient({ url: "https://discord.com/api/webhooks/936464227244318811/cUDTQI8ceQhOHK_LNgE9x7n1Xlj8uukkD3-Jfqvd0hPUtMp0EfOf9HRArdUcg9Y4MotF" })
+const webhook = new WebhookClient({ url: "https://discord.com/api/webhooks/954904210107932683/yZLDc3Suqu0ReaEwusjagBjBMofk2FL6i-VNltAw6Z2B_Wfj44kKT5Ux400ZR1Xdt1qP" })
 
-process.on('unhandledRejection', async e => {
+process.on('unhandledRejection', async (reason, promise) => {
     await webhook.send({
         embeds: [
             new MessageEmbed()
                 .setTitle(`Error - Unhandled Rejection`)
                 .setColor('#fb9937')
-                .setDescription(`\`\`\`js\n${e}\n\`\`\``)
+                .setDescription(`\`\`\`js\n${(reason as any).stack}\n\`\`\``)
                 .setTimestamp()
         ]
     })
@@ -25,3 +26,17 @@ process.on('uncaughtException', async e => {
         ]
     })
 })
+
+export async function handleError(e) {
+    try {
+        await webhook.send({      
+            embeds: [
+                new MessageEmbed()
+                    .setTitle(`Command Error`)
+                    .setColor('#ff5959')
+                    .setDescription(`\`\`\`js\n${e.stack}\n\`\`\``)
+                    .setTimestamp()
+            ]
+        })
+    } catch {}
+}

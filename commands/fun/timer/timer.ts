@@ -4,7 +4,7 @@ import { CommandPreprocessor } from "../../../lib/preprocessor/commandPreprocess
 import { CooldownDate } from "../../../lib/preprocessor/cooldownDate.js";
 import { createTimer, deleteTimer, fetchTimer, parseTimeString } from "./timerDb.js";
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 10 }),
     serverOnly: true,
     botPermissions: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY]

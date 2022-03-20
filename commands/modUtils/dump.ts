@@ -3,8 +3,10 @@ import { CommandInteraction, Permissions } from "discord.js";
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js";
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
-export const preprocessorOptions = new CommandPreprocessor({
-    cooldown: new CooldownDate({ minutes: 1 })
+export const preprocessor = new CommandPreprocessor({
+    cooldown: new CooldownDate({ minutes: 1 }),
+    saveCooldownInDb: true,
+    serverOnly: true
 })
 
 export const slashCommand = new SlashCommandBuilder()

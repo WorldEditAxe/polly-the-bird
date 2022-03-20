@@ -5,12 +5,13 @@ import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
 const suggestionsChannel = '870234228766425119', chanObj = await (global.bot.djsClient as Client).channels.fetch(suggestionsChannel) as TextChannel
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ minutes: 5 }),
-    saveCooldownInDb: true
+    saveCooldownInDb: true,
+    serverOnly: true
 })
-
 export const slashCommand = new SlashCommandBuilder()
+
     .setName('suggest')
     .setDescription('Suggest something')
     .addStringOption(o => o.setName('suggestion').setDescription('The suggestion to suggest').setRequired(true))

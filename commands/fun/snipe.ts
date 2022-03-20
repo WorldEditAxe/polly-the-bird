@@ -6,9 +6,10 @@ import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js"
 const snipe = new Map<string, Message>()
 const snooze = ms => new Promise<void>(res => setTimeout(res, ms))
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 10 }),
-    saveCooldownInDb: false
+    saveCooldownInDb: false,
+    serverOnly: true
 })
 
 export const slashCommand = new SlashCommandBuilder()
@@ -18,7 +19,7 @@ export const slashCommand = new SlashCommandBuilder()
 export async function execute(i: CommandInteraction) {
     if (!i.guild) return await i.reply({ content: 'imagine not using this in a server smfh', ephemeral: true })
     if (!i.guild.me.permissionsIn(i.channel as any).has(Permissions.FLAGS.VIEW_CHANNEL)) return await i.reply({ content: "I cannot snipe in a channel where I do not have the permissions to view sent messages in.", ephemeral: true })
-    if (!(i.member.roles as GuildMemberRoleManager).cache.has('799022090791419954') && !(i.member.roles as GuildMemberRoleManager).cache.has('785676961904852992')) return await i.reply({ content: "You need to be a 25 million donor in order to use this command!", ephemeral: true })
+    if (!(i.member.roles as GuildMemberRoleManager).cache.has('799022090791419954') && !(i.member.roles as GuildMemberRoleManager).cache.has('929898376001122325') && !(i.member.roles as GuildMemberRoleManager).cache.has('785676961904852992')) return await i.reply({ content: "You need to be a 25 million donor in order to use this command!", ephemeral: true })
     const snipedMessage = snipe.get(i.channel.id)
     if (!snipedMessage) return await i.reply({ content: 'hey bud there ain\'t any sniped messages here' })
     const attachments = snipedMessage.attachments

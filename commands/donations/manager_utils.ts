@@ -8,7 +8,7 @@ import * as donos from "./donoDb.js"
 const wipeConf: Array<number> = new Array<number>()
 const embedColor: ColorResolvable = '#f5cb42'
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 10 }),
     serverOnly: true,
     saveCooldownInDb: true
@@ -91,8 +91,8 @@ export async function execute(interaction: CommandInteraction, client: Client) {
                 await interaction.deferReply()
                 switch(interaction.options.getString('action')) {
                     case 'add':
-                        await donos.addTo(interaction.options.getUser('user').id, interaction.options.getString('type') as any, interaction.options.getInteger('amount') >= 5000000 ? Math.ceil(interaction.options.getInteger('amount') * 1.25) : interaction.options.getInteger('amount'), m.id)
-                        const newAmount = dono[interaction.options.getString('type').toLowerCase()] + (interaction.options.getInteger('amount') >= 5000000 ? Math.ceil(interaction.options.getInteger('amount') * 1.25) : interaction.options.getInteger('amount'))
+                        await donos.addTo(interaction.options.getUser('user').id, interaction.options.getString('type') as any, interaction.options.getInteger('amount'), m.id)
+                        const newAmount = dono[interaction.options.getString('type').toLowerCase()] + (interaction.options.getInteger('amount'))
                         const emb = new MessageEmbed()
                             .setTitle(`Updated Donations`)
                             .setDescription(`${interaction.options.getUser('user').username}'s donations have been updated.`)
@@ -106,8 +106,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
                             emb.addField("Amount Added", `\`${donos.currency_symbol} ${donos.prettify(Math.floor(interaction.options.getInteger('amount') >= 5000000 ? interaction.options.getInteger('amount') * 1.25 : interaction.options.getInteger('amount')))}\``, true)
                             emb.addField("New Amount", `\`${donos.currency_symbol} ${donos.prettify(newAmount)}\``, true)
                         }
-                        if (interaction.options.getInteger('amount') >= 5000000) await interaction.editReply({ content: `<@${interaction.options.getUser('user').id}> Thanks for donating! You have received a **1.25x** multiplier on your donation.\n\`${interaction.options.getString('type') != 'MONEY' ? donos.currency_symbol + " " : ""}${donos.prettify(interaction.options.getInteger('amount'), interaction.options.getString('type') == 'MONEY')}\` ➪ \`${interaction.options.getString('type') != 'MONEY' ? donos.currency_symbol + " " : ""}${donos.prettify(Math.ceil(interaction.options.getInteger('amount') * 1.25), interaction.options.getString('type')== 'MONEY')}\``, embeds: [ emb ] })
-                        else await interaction.editReply({ embeds: [ emb ] })
+                        await interaction.editReply({ embeds: [ emb ] })
                         break
                     case 'remove':
                         await donos.takeFrom(interaction.options.getUser('user').id, interaction.options.getString('type') as any, interaction.options.getInteger('amount'), m.id)

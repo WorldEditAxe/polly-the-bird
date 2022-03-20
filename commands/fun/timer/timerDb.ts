@@ -36,7 +36,12 @@ export async function fetchTimer(id: string): Promise<timerSchema> {
 async function timerCallback(timer: timerSchema) {
     if (!queuedTimers.includes(timer.messageId)) return
     delete queuedTimers[timer.messageId]
-    const channel = await client.channels.fetch(timer.channelId).catch() as TextChannel, msg = await channel.messages.fetch(timer.messageId).catch()
+    let channel, msg
+    
+    try {
+        channel = await client.channels.fetch(timer.channelId).catch() as TextChannel
+        msg = await channel.messages.fetch(timer.messageId).catch()
+    } catch { return await timerDb.deleteOne({ messageId: timer.messageId }) }
 
     if (channel.permissionsFor(channel.guild.me).has(Permissions.FLAGS.SEND_MESSAGES) && msg) {
         await msg.edit({ embeds: [ msg.embeds[0].setColor('#000000').setDescription("Timer ended!") ] })
@@ -77,7 +82,8 @@ async function timerLoop() {
     }
 }
 
-timerLoop()
+function e() { timerLoop() }
+e()
 
 export function parseTimeString(str: string): number {
     if (!str || str.length == 0) throw new Error("String is empty! {6}")
@@ -87,8 +93,9 @@ export function parseTimeString(str: string): number {
                       mth: 2628000, months: 2628000, mths: 2628000, month: 2628000,
                       w: 604800, week: 604800, weeks: 604800,
                       d: 86400, day: 86400, days: 86400,
+                      h: 3600, hr: 3600, hrs: 3600, hour: 3600, hours: 3600,
                       m: 60, min: 60, minute: 60, minutes: 60,
-                    s: 1, seconds: 1, second: 1, sec: 1 }
+                      s: 1, seconds: 1, second: 1, sec: 1 }
 
     let emptyLen = 0
 

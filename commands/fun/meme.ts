@@ -9,7 +9,7 @@ const uri = 'https://www.reddit.com/r/memes/top.json?count=100'
 const wait = ms => new Promise<void>(res => setTimeout(res, ms))
 let errored = false
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 3 }),
     saveCooldownInDb: true
 })

@@ -7,8 +7,10 @@ import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
 let joinedUsers: User[], startTime: number, heistMode = false
 
-export const preprocessorOptions = new CommandPreprocessor({
-    cooldown: new CooldownDate({ minutes: 1 })
+export const preprocessor = new CommandPreprocessor({
+    cooldown: new CooldownDate({ minutes: 1 }),
+    saveCooldownInDb: true,
+    serverOnly: true
 })
 
 export const slashCommand = new SlashCommandBuilder()

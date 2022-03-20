@@ -3,8 +3,9 @@ import { CommandInteraction, GuildChannel, MessageEmbed, Permissions } from "dis
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js";
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
-export const preprocessorOptions = new CommandPreprocessor({
-    cooldown: new CooldownDate({ seconds: 10 })
+export const preprocessor = new CommandPreprocessor({
+    cooldown: new CooldownDate({ seconds: 10 }),
+    serverOnly: true
 })
 
 export const slashCommand = new SlashCommandBuilder()

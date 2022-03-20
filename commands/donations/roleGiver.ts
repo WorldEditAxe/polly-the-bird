@@ -5,7 +5,6 @@ const donoDb = eventBindings
 const client: Client = global.bot.djsClient
 
 const donoMappings = {
-    5000000: '787342154862166046',     // 5 mil donor
     10000000: '787342156573704203',    // 10 mil donor
     25000000: '799022090791419954',    // 25 mil donor
     50000000: '787868761528336427',    // 50 mil donor

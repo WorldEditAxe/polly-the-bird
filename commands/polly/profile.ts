@@ -6,7 +6,7 @@ import { fetchDonos, stringize } from "../donations/donoDb.js";
 
 const format = Intl.NumberFormat('en-US')
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 10 })
 })
 

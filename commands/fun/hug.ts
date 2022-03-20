@@ -3,7 +3,7 @@ import { CommandInteraction } from "discord.js";
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js";
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
-export const preprocessorOptions = new CommandPreprocessor({
+export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ seconds: 10 }),
     saveCooldownInDb: false
 })
