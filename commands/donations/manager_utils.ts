@@ -103,7 +103,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
                             emb.addField("Amount Added", `\`${donos.prettify(interaction.options.getInteger('amount'), true)}\``, true)
                             emb.addField("New Amount", `\`${donos.prettify(newAmount, true)}\``, true)
                         } else {
-                            emb.addField("Amount Added", `\`${donos.currency_symbol} ${donos.prettify(Math.floor(interaction.options.getInteger('amount') >= 5000000 ? interaction.options.getInteger('amount') * 1.25 : interaction.options.getInteger('amount')))}\``, true)
+                            emb.addField("Amount Added", `\`${donos.currency_symbol} ${donos.prettify(interaction.options.getInteger('amount'))}\``, true)
                             emb.addField("New Amount", `\`${donos.currency_symbol} ${donos.prettify(newAmount)}\``, true)
                         }
                         await interaction.editReply({ embeds: [ emb ] })

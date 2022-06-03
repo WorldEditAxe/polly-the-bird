@@ -20,21 +20,30 @@ export async function execute(i: CommandInteraction) {
     }
 
     await i.reply({
+        content: "On mobile? Don't worry, we got you! Copy the message content!\n```\n"
+            + `Dadvertise heist **__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(🏦┃heist)**`
+            + `\n:trophy:୨ ⨯ LOTS of massive giveaways ongoing! (crown, tros, bolts)`
+            + `\n:game_die: ୨ ⨯  We have awesome grinder perks for only 2 million coins per day!`
+            + `\n:money_mouth: ୨ ⨯  Daily 30 million heist everyday!**`
+            + "\n`Invite link:` https://discord.gg/TA9twYKey3\n\`\`\`",
         embeds: [
             new MessageEmbed()
                 .setColor('#dee036')
                 .setTitle("Generated Heist Ad")
-                .setDescription("Generated heist ad preview:\n" + `**__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(#🏦┃heist)**`
+                .setDescription("Generated heist ad preview:\n" + `**__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(🏦┃heist)**`
                                     + `\n:trophy:୨ ⨯ LOTS of massive giveaways ongoing! (crown, tros, bolts)`
+                                    + `\n:game_die: ୨ ⨯  We have awesome grinder perks for only 2 million coins per day!`
                                     + `\n:money_mouth: ୨ ⨯  Daily 30 million heist everyday!**`
                                     + "\n`Invite link:` https://discord.gg/TA9twYKey3")
-                .addField("Shero heist ad command", `\`\`\`\nDadvertise **__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(#🏦┃heist)**`
+                .addField("Shero heist ad command", `\`\`\`\nDadvertise heist **__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(🏦┃heist)**`
                         + `\n:trophy:୨ ⨯ LOTS of massive giveaways ongoing! (crown, tros, bolts)`
+                        + `\n:game_die: ୨ ⨯  We have awesome grinder perks for only 2 million coins per day!`
                         + `\n:money_mouth: ୨ ⨯  Daily 30 million heist everyday!**`
                         + "\n`Invite link:` https://discord.gg/TA9twYKey3\n\`\`\`")
                 .setTimestamp()
         ],
-        ephemeral: true
+        ephemeral: true,
+        allowedMentions: {}
     })
 }
 

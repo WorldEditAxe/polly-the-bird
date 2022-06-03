@@ -140,7 +140,7 @@ async function donoUpdated(amount: number, member: GuildMember, money: boolean) 
                         .setColor(erroredRoles.length > 0 ? '#ff1111' : '#e1da51')
                         .setDescription(`For donating a total of \`${money ? '' : `${currency_symbol} `}${prettify(amount, money)}\`, you have obtained the following role(s): ${roleString}. If you would like to claim perks available to you, please ask in <#870182326901022720>.${erroredString.length > 0 ? `\n\nOh no! Something went wrong while giving you the following role(s): ${erroredString}. Please contact staff for assistance in the support channel.` : ''}`)
                 ]
-            }).catch()
+            }).catch(() => {})
         } catch (err) { console.log(err) }
     } else if (erroredRoles.length > 0) {
         let erroredString = ''

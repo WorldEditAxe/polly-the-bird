@@ -3,7 +3,7 @@ import { currency_symbol, eventBindings, prettify } from "./donoDb.js";
 
 const donations = eventBindings
 const client: Client = global.bot.djsClient
-const loggingChannel = '930324890471518278'
+const loggingChannel = process.env.POLLY_DEVELOPMENT_MODE == 'true' ? '967274393266970654' : '930324890471518278'
     , chan = await client.channels.fetch(loggingChannel) as TextChannel
 
 donations.on('add', async (userId: string, type:  'GIVEAWAYS' | 'HEISTS' | 'EVENTS' | 'SPECIAL' | 'MONEY', amount: number, total: number, moderator: string) => {

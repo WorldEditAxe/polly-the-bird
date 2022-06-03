@@ -2,7 +2,8 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js";
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
-import { fetchDonos, stringize } from "../donations/donoDb.js";
+import { fetchDonos, prettify, stringize } from "../donations/donoDb.js";
+import { getUserProfile } from "./pollyDatabase.js";
 
 const format = Intl.NumberFormat('en-US')
 
@@ -21,6 +22,7 @@ export async function execute(i: CommandInteraction) {
 
     const info = await fetchDonos(user.id)
                , cumulativeTotal = info.giveaways + info.heists + info.events + info.special
+               , pollyCookie = await getUserProfile(user.id)
 
     return await i.reply({ embeds: [
         new MessageEmbed()
@@ -34,6 +36,7 @@ export async function execute(i: CommandInteraction) {
                 { name: 'Event Donations', value: stringize(info.events), inline: true },
                 { name: 'Special Donations', value: stringize(info.special), inline: true },
                 { name: 'Money Donations', value: stringize(info.money, true), inline: true },
-                { name: 'Total (excluding money)', value: stringize(cumulativeTotal), inline: true })
+                { name: 'Total (excluding money)', value: stringize(cumulativeTotal), inline: true },
+                { name: "Polly Crackers", value: `\`🍘 ${prettify(pollyCookie.cookies)}\` (started <t:${pollyCookie.startDate}:R>, date: <t:${pollyCookie.startDate}>)` })
     ] })
 }

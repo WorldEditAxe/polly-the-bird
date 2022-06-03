@@ -29,6 +29,11 @@ export async function execute(i: CommandInteraction) {
                 .setCustomId(fButtonI)
                 .setEmoji('934709098992242758')
                 .setStyle('PRIMARY'))
+            .addComponents(new MessageButton()
+                .setCustomId(i.user.id)
+                .setLabel(`Sent by: ${i.user.tag}`)
+                .setStyle('SECONDARY')
+                .setDisabled(true))
         , collector = i.channel.createMessageComponentCollector({ componentType: 'BUTTON', time: 60 * 1000, filter: filter })
 
         const msg = await i.channel.send({

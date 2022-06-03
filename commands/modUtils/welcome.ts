@@ -6,7 +6,8 @@ let heistMode = false
 
 export function setHeistMode(newMode: boolean) { heistMode = newMode }
 
-const welcomeChannel = '870193314413019216', goodbyeChannel = '784529738491625473'
+const welcomeChannel = process.env.POLLY_DEVELOPMENT_MODE == 'true' ? '946600009011433512' : '870193314413019216'
+    , goodbyeChannel = process.env.POLLY_DEVELOPMENT_MODE == 'true' ? '946600009011433512' : '784529738491625473'
 
 type roleButtonTypings = 'ar-events' | 'ar-heists' | 'ar-lottery' | 'ar-coinbomb' | 'ar-sgiveaways' | 'ar-ngiveaways' | 'ar-giveaways'
 
@@ -209,5 +210,5 @@ async function dmUser(user: User) {
                     )
             ]
         })
-    } catch (e) { console.log(e.stack) } 
+    } catch (e) {} 
 }

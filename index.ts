@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv"
+dotenv.config();
 import { Client, CommandInteraction, GuildMember, Intents, Interaction, MemberMention, MessageEmbed, Permissions } from "discord.js"
 import { REST } from "@discordjs/rest"
 import * as fs from "fs"
@@ -9,8 +10,8 @@ import { randomUUID } from "crypto"
 import { CommandPreprocessor } from "./lib/preprocessor/commandPreprocessor.js"
 import { preprocess } from "./lib/preprocessor/preprocessor.js"
 import { init } from "./lib/preprocessor/cooldownDb.js"
-dotenv.config()
 
+const { getUserBlacklistDetails } = await import("./commands/admin/blacklists/blacklist.js")
 export const cooldownMap = new Map<string, Map<string, number>>()
 
 const client: Client = new Client({ intents: [new Intents(32767)] })
@@ -25,6 +26,14 @@ const commandMap: Map<SlashCommandBuilder, any> = new Map<SlashCommandBuilder, a
 const privateCommandMap: Map<string, { execute: Function, slashCommand: SlashCommandBuilder, preprocessor?: CommandPreprocessor }[]> = new Map()
 const preprocessorMap: Map<string, CommandPreprocessor> = new Map<string, CommandPreprocessor>()
 
+if (process.env.POLLY_DEVELOPMENT_MODE && (process.env.POLLY_DEVELOPMENT_MODE as string).toLowerCase() == 'true') {
+    logger.warn("Polly is set to development mode. Setting up environment variables...")
+    token = process.env.DEVELOPMENT_TOKEN
+    devGuildId = process.env.DEVELOPMENT_GID
+
+    process.env.MONGO_URI = process.env.DEVELOPMENT_MONGO_URI
+    process.env.REDIS_URI = process.env.DEVELOPMENT_REDIS_URI
+}
 
 const startTimer: number = Date.now()
 
@@ -163,6 +172,24 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.isCommand()) return
     for (const cmd of commandMap) {
         if (interaction.commandName == cmd[0].name) {
+            // check BL status
+            const blCheck = await getUserBlacklistDetails(interaction.user)
+
+            if (blCheck.banned) {
+                return await interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                            .setTitle("Blacklisted")
+                            .setDescription("You're currently blacklisted and cannot run any commands!")
+                            .addFields(
+                                { name: "Reason", value: blCheck.reason, inline: true },
+                                { name: "Expiry Date", value: `${blCheck.expiry_time == 'infinity' ? '<forever>' : `<t:${blCheck.expiry_time}:R>`}` }
+                            )
+                    ],
+                    ephemeral: true
+                })
+            }
+
             const pObject = preprocessorMap.get(cmd[0].name)
 
             if (pObject) {
@@ -214,6 +241,24 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 
         for (const cmd of guildCmds) {
             if (interaction.commandName == cmd.slashCommand.name) {
+                // check BL status
+                const blCheck = await getUserBlacklistDetails(interaction.user)
+
+                if (blCheck.banned) {
+                    return await interaction.reply({
+                        embeds: [
+                            new MessageEmbed()
+                                .setTitle("Blacklisted")
+                                .setDescription("You're currently blacklisted and cannot run any commands!")
+                                .addFields(
+                                    { name: "Reason", value: blCheck.reason, inline: true },
+                                    { name: "Expiry Date", value: `${blCheck.expiry_time == 'infinity' ? '<forever>' : `<t:${blCheck.expiry_time}:R>`}` }
+                                )
+                        ],
+                        ephemeral: true
+                    })
+                }
+
                 if (cmd.preprocessor) {
                     const res = await preprocess(interaction, cmd.slashCommand.name, cmd.preprocessor, interaction.guild.id)
 
@@ -240,6 +285,8 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 } catch (err) {
                     const errId: string = randomUUID()
                     const embed: MessageEmbed = new MessageEmbed()
+                    
+
                     embed.setColor('#eb4034')
                     embed.setDescription(`Oops! It looks like something went wrong while running that command.
                     Error code: \`${errId}\``)

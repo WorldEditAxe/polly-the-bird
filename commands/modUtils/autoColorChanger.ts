@@ -8,6 +8,7 @@ let db: Collection, roleObj: Role
 const roleId = '788738306770206790', guildId = '784491141022220309'
 
 export async function staticBlock() {
+    if (process.env.POLLY_DEVELOPMENT_MODE == 'true') return
     await awaitStart()
     const client: Client = global.bot.djsClient
     roleObj = await (await client.guilds.fetch(guildId)).roles.fetch(roleId)

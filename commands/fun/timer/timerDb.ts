@@ -44,7 +44,7 @@ async function timerCallback(timer: timerSchema) {
     } catch { return await timerDb.deleteOne({ messageId: timer.messageId }) }
 
     if (channel.permissionsFor(channel.guild.me).has(Permissions.FLAGS.SEND_MESSAGES) && msg) {
-        await msg.edit({ embeds: [ msg.embeds[0].setColor('#000000').setDescription("Timer ended!") ] })
+        await msg.edit({ embeds: [ msg.embeds[0].setColor('#000000').setDescription("Timer ended!") ] }).catch(() => {})
 
         await msg.reply({
             embeds: [
@@ -55,10 +55,10 @@ async function timerCallback(timer: timerSchema) {
                     .setTimestamp()
             ],
             content: `<@${timer.runner}>`
-        }).catch()
+        }).catch(() => {})
         await timerDb.deleteOne({ messageId: timer.messageId })
     } else if (channel.permissionsFor(channel.guild.me).has(Permissions.FLAGS.VIEW_CHANNEL)) {
-        await msg.delete().catch()
+        await msg.delete().catch(() => {})
     }
 }
 
@@ -71,7 +71,7 @@ async function timerLoop() {
                 queuedTimers.push(timer.messageId)
     
                 if (timer.timeEnd * 1000 < instant) {
-                    timerCallback(timer).catch()
+                    timerCallback(timer).catch(() => {})
                 } else {
                     setTimeout(() => timerCallback(timer).catch(), Math.floor(timer.timeEnd * 1000 - instant))
                 }

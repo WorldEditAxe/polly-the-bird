@@ -14,8 +14,9 @@ export async function staticBlock() {
         if (!m.guild) return
         if (m.mentions.everyone || (m.cleanContent.includes('@here') && m.member.permissionsIn(m.channel as TextChannel).has(Permissions.FLAGS.MENTION_EVERYONE))) {
             pingList.set(m.author.id, (pingList.get(m.author.id) ?? 0) + 1)
+            const mbr = await m.member.fetch()
 
-            if (pingList.get(m.author.id) >= tolerance || m.member.roles.cache.some(r => managerRoles.includes(r.id))) {
+            if (pingList.get(m.author.id) >= tolerance || mbr.roles.cache.some(r => managerRoles.includes(r.id))) {
                 try { await m.member.ban({ reason: `everyone ping tolerance exceeded threshold.`, days: 1 }) }
                 catch {}
             }

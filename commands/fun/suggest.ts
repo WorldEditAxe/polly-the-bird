@@ -3,7 +3,7 @@ import { Client, CommandInteraction, GuildMember, MessageEmbed, TextChannel } fr
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js";
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js";
 
-const suggestionsChannel = '870234228766425119', chanObj = await (global.bot.djsClient as Client).channels.fetch(suggestionsChannel) as TextChannel
+const suggestionsChannel = process.env.POLLY_DEVELOPMENT_MODE == 'true' ? '967282757132754974' : '870234228766425119', chanObj = await (global.bot.djsClient as Client).channels.fetch(suggestionsChannel) as TextChannel
 
 export const preprocessor = new CommandPreprocessor({
     cooldown: new CooldownDate({ minutes: 5 }),
