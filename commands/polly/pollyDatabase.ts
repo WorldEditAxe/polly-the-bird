@@ -54,13 +54,31 @@ export async function staticBlock() {
         const content = m.content.toLowerCase()
 
         if (m.mentions.has(m.client.user)) {
-            try { await m.channel.send("birb :sunglasses:") }
+            try {
+                await m.channel.send("Hello there, I'm Polly <:wave:826306017381449728>! To see all of my commands, type `/` and click on my PFP.")
+            }
             catch {}
         } else if (content.includes('polly is based')) {
-            try { await m.channel.send("polly is based brib") }
+            try { await m.channel.send("polly is based birb") }
             catch {}
         } else if (content.includes("fuck polly")) {
             try { await m.channel.send('POLLY DETECC DISRESPECC >:(') }
+            catch {}
+        } else if (content.includes("polly is gay")) {
+            try { await m.channel.send("no u gay") }
+            catch {}
+        } else if (content.includes("come to my room")) {
+            try { await m.channel.send("k give me cookies") }
+            catch {}
+        } else if (content.includes("i fucked ur mom")) {
+            try {
+                await m.channel.send("I'm in your walls. :wink:")
+                    .then(m => {
+                        if (m.deletable) m.delete().catch(() => {})
+                    })
+            } catch {}
+        } else if (content.includes("javascript > typescript") || content.includes("js > ts")) {
+            try { await m.channel.send("NO TS > JS U DUMBASS") }
             catch {}
         }
     })
