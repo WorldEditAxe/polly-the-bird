@@ -54,11 +54,11 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
     
             await msg.edit({ embeds: [
                 new MessageEmbed()
-                    .setTitle('POLLY IS FULL')
-                    .setColor('GREEN')
+                    .setTitle(cookies > 0 ? 'POLLY IS FULL' : 'POLLY IS HUNGRY')
+                    .setColor(cookies > 0 ? 'GREEN' : 'RED')
                     .setDescription(cookies > 0 ? `POLLY HAS BEEN FED AND NOW HAS ${cookies} CRACKER(S) <:polly:928461448844300299>`
                                                  : `POLLY HAS NO CRACKER. POLLY WANT CRACKER. <:polly:928461448844300299>`)
-                    .setFooter('Give Polly more crackers or else')
+                    .setFooter(msg.embeds[0].footer)
                     .setTimestamp()
             ],
             components: [   
@@ -76,7 +76,7 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
 }
 
 async function loop() {
-    while (false) {
+    while (true) {
         await sayHiToPolly(await client.channels.fetch(sendChannel) as any, false)
         await snooze(timer * 60 * 1000 + (randomFrom(0, 10) * 60 * 1000))
     }
