@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders"
-import { Client, CommandInteraction, GuildMemberRoleManager, Message, MessageEmbed, Permissions, TextChannel } from "discord.js"
+import { Client, CommandInteraction, GuildChannel, GuildMemberRoleManager, Message, MessageEmbed, Permissions, TextChannel, User } from "discord.js"
 import { CommandPreprocessor } from "../../lib/preprocessor/commandPreprocessor.js"
 import { CooldownDate } from "../../lib/preprocessor/cooldownDate.js"
 
@@ -11,15 +11,19 @@ type loggedType = 'DELETED' | 'EDITED'
 type DeletedMessage = {
     messageId: string,
     content: string,
-    attachments: string[]
+    attachments: string[],
+    author: User,
+    channel: GuildChannel,
     type: 'DELETED'
 }
 
 type EditedMessage = {
     messageId: string
     messageJumpLink: string,
-    oldContent: string
+    oldContent: string,
     newContent: string,
+    author: User,
+    channel: GuildChannel,
     type: 'EDITED'
 }
 
@@ -45,6 +49,20 @@ export async function execute(i: CommandInteraction) {
         // send snipelist
     } else {
         // send latest sniped msg
+        const msg = snipe.get(i.channelId)
+        if (!msg || msg.length < 1) return await i.reply({ content: "Did you expect something to be here? Sadly, there isn't any.", ephemeral: true })
+        const m = msg[0]
+
+        if (m.type == 'DELETED') {}
+
+        await i.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setAuthor({ name: m.author.tag, iconURL: m.author.displayAvatarURL() })
+                    .setTitle(`Sniped message in #${m.channel.name}`)
+                    .setDescription(m.type == 'DELETED' ? m.content || "<nothing, maybe an embed or attachment?>" : m.)
+            ]
+        })
     }
 }
 
@@ -53,6 +71,7 @@ export async function staticBlock() {
     
     client.on('messageDelete', async m => {
         if (!m.guild || m.author.bot) return
+        if (!snipe.has(m.channelId)) snipe.set(m.channelId, new Array<any>())
         const attachments = []
         m.attachments.forEach(a => attachments.push(a.url))
 
@@ -60,17 +79,24 @@ export async function staticBlock() {
             messageId: m.id,
             content: m.content,
             attachments: attachments,
+            author: m.author,
+            channel: m.channel as any,
             type: 'DELETED'
         } as DeletedMessage, 10)
     })
 
     client.on('messageUpdate', (before, after) => {
         if (!after.guild || after.author.bot) return
+        if (!snipe.has(after.channelId)) snipe.set(m.channelId, new Array<any>())
+
         appendAndClamp(snipe.get(after.channelId), {
             messageId: after.id,
             messageJumpLink: after.url,
             oldContent: before.content,
-            newContent: after.content
+            newContent: after.content,
+            author: after.author,
+            channel: m.channel as any,
+            type: 'EDITED'
         } as EditedMessage, 10)
     })
 }
