@@ -234,7 +234,7 @@ export async function staticBlock() {
 function appendAndClamp(array: Array<any>, element: any, limit: number) {
     if (array.length > limit) {
         array.unshift(element)
-        array.pop
+        array.pop()
     } else {
         array.unshift(element)
     }
