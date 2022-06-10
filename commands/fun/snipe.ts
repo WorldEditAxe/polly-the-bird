@@ -99,9 +99,10 @@ export async function execute(i: CommandInteraction) {
         for (const message of msg) {
             if (message.type == 'DELETED') {
                 let str = `**Author: **${message.author.tag}\n`
-                        + `**Attachments: ** ${getAttachmentString(message.attachments, true)}\n`
+                
+                if (message.attachments.length > 0) str += `**Attachments: ** ${getAttachmentString(message.attachments, true)}\n`
 
-                str += `**Old Content:** ${message.content ? message.content.length > (500 - str.length) ? message.content.slice(0, 500 - str.length) + '...' : message.content : message.content.length <= 500 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}\n`
+                str += `**Content:** ${message.content ? message.content.length > (500 - str.length) ? message.content.slice(0, 500 - str.length) + '...' : message.content : message.content.length <= 500 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}\n`
 
                 emb.addFields({
                     name: `#${msg.indexOf(message) + 1} [${message.type}]`,
@@ -110,10 +111,13 @@ export async function execute(i: CommandInteraction) {
                 })
             } else {
                 // TODO: work on esnipe
-                let str = `**Author: **${message.author.tag}\n`
-                        + `**Attachments: ** ${getAttachmentString(message.attachments.old, true)}\n`
+                let str = `**Author : **${message.author.tag}\n`
 
-                str += `\n**Content:** ${message.content ? message.content.length > (1000 - str.length) ? message.content.slice(0, 1000 - str.length) + '...' : message.content : message.content.length <= 1000 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}`
+                if (message.attachments.old.length > 0) str += `**Old Attachments: ** ${getAttachmentString(message.attachments.old, true)}\n`
+                if (message.attachments.new.length > 0) str += `**New Attachments: ** ${getAttachmentString(message.attachments.new, true)}\n`
+
+                str += `**Old Content:** ${message.oldContent ? message.oldContent.length > (256 - str.length) ? message.oldContent.slice(0, 256 - str.length) + '...' : message.oldContent : message.oldContent.length <= 256 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}\n`
+                str += `**New Content:** ${message.oldContent ? message.oldContent.length > (1000 - str.length) ? message.oldContent.slice(0, 1000 - str.length) + '...' : message.oldContent : message.oldContent.length <= 1000 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}`
 
                 emb.addFields({
                     name: `#${msg.indexOf(message) + 1} [${message.type}]`,
@@ -122,6 +126,13 @@ export async function execute(i: CommandInteraction) {
                 })
             }
         }
+
+        await i.reply({
+            embeds: [
+                emb
+            ],
+            ephemeral: true
+        })
 
     } else {
         // send latest sniped msg
