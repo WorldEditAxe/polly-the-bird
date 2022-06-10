@@ -58,7 +58,8 @@ export async function execute(i: CommandInteraction) {
                 .setTitle(meme.name)
                 [meme.media.startsWith('https://v.redd.it') ? 'setDescription' : 'setImage'](meme.media.startsWith('https://v.redd.it') ? `[<offsite video>](${meme.media})` : meme.media)
                 .setTimestamp()
-        ]
+        ],
+        ephemeral: true
     })
 }
 
