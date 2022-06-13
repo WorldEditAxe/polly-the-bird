@@ -16,12 +16,12 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
     .addComponents(
         new MessageButton()
             .setCustomId(id)
-            .setEmoji('928484406266581003')
+            .setEmoji('🍘')
             .setStyle('SUCCESS')
     )
     const gaveCookies = new Array<string>()
     const collector = chan.createMessageComponentCollector({ componentType: 'BUTTON', time: 30000 })
-    let cookies = 0
+    let cookies = 0 
 
     
     await chan.sendTyping()
@@ -29,7 +29,7 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
         new MessageEmbed()
             .setTitle("POLLY IS HUNGRY")
             .setColor('#fcba03')
-            .setDescription("GIVE POLLY CRACKER OR ELSE <:polly:928461448844300299>")
+            .setDescription("GIVE POLLY CRACKER OR ELSE <:polly:932821900290310144>")
             .setFooter("Please do not feed Polly cookies IRL - PETA")
             .setTimestamp()
     ],
@@ -56,8 +56,8 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
                 new MessageEmbed()
                     .setTitle(cookies > 0 ? 'POLLY IS FULL' : 'POLLY IS HUNGRY')
                     .setColor(cookies > 0 ? 'GREEN' : 'RED')
-                    .setDescription(cookies > 0 ? `POLLY HAS BEEN FED AND NOW HAS ${cookies} CRACKER(S) <:polly:928461448844300299>`
-                                                 : `POLLY HAS NO CRACKER. POLLY WANT CRACKER. <:polly:928461448844300299>`)
+                    .setDescription(cookies > 0 ? `POLLY HAS BEEN FED AND NOW HAS ${cookies} CRACKER(S) <:polly:932821900290310144>`
+                                                 : `POLLY HAS NO CRACKER. POLLY WANT CRACKER. <:polly:932821900290310144>`)
                     .setFooter(msg.embeds[0].footer)
                     .setTimestamp()
             ],
@@ -66,7 +66,7 @@ export async function sayHiToPolly(channel: GuildChannel, ping?: boolean) {
                     .addComponents(new MessageButton()
                         .setCustomId(`no moar cracker`)
                         .setDisabled(true)
-                        .setEmoji('928484406266581003')
+                        .setEmoji('🍘')
                         .setStyle('SUCCESS')
                     )
             ]

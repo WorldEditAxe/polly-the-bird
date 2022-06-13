@@ -49,18 +49,18 @@ export async function execute(i: CommandInteraction) {
         if (!joinedUsers) return await i.reply({ content: "Heist mode is off lmao, I can't ban freeloaders", ephemeral: true })
         const msg = await i.reply(`Fetching freeloaders (this may take a while!)`), runner = i.user
         let failedCount = 0
-        let retString = ''
+        let freeloaderFileContents = ''
         const members = await i.guild.members.fetch()
 
         for (const user of joinedUsers) {
             try {
                 if (!members.has(user.id)) {
-                    retString += `${user.tag} (ID: ${user.id})\n`
+                    freeloaderFileContents += `${user.tag} (ID: ${user.id})\n`
                 }
             } catch { failedCount++ }
         }
 
-        retString = `List of freeloaders (${new Date(startTime * 1000).toUTCString()} -> ${new Date().toUTCString()}):\n----------------------------\n${retString.trimEnd()}`
+        freeloaderFileContents = `List of freeloaders (${new Date(startTime * 1000).toUTCString()} -> ${new Date().toUTCString()}):\n----------------------------\n${freeloaderFileContents.trimEnd()}`
 
         joinedUsers = undefined
         startTime = undefined
@@ -70,7 +70,7 @@ export async function execute(i: CommandInteraction) {
             content: `<@${runner.id}>, I have your freeloader list!`,
             files: [{
                 name: `freeloader_dump-${new Date().toISOString()}.txt`,
-                attachment: Buffer.from(retString)
+                attachment: Buffer.from(freeloaderFileContents)
             }]
         })
     }
@@ -80,5 +80,18 @@ export async function staticBlock() {
     (global.bot.djsClient as Client).on('guildMemberAdd', m => {
         if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown) return
         if (heistMode && !joinedUsers[m.user.id]) joinedUsers.push(m.user)
+    }).on('messageCreate', msg => {
+        if (heistMode && !msg.author.bot) {
+            if (msg.content) {
+                const lowered = msg.content.toLowerCase()
+                const m = "<#931590909500481538>, use ur eyes when??????"
+
+                if (lowered.includes("heist") && lowered.includes("where")) {
+                    msg.reply(m).catch(() => {})
+                } else if (lowered.includes("ur mom")) {
+                    msg.react('🐣').catch(() => {})
+                }
+            }
+        }
     })
 }
