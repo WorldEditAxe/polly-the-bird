@@ -5,6 +5,12 @@ await awaitStart()
 
 const db = await getDb("managers")
 
+// constants
+const MANAGER_REQUIREMENTS = {
+    giveaways: 7,
+    events: 5
+}
+
 export enum DayOfWeek {
     SUNDAY = 1,
     MONDAY = 2,
@@ -43,30 +49,30 @@ export function dayToString(date: number): string {
     }
 }
 
-export function dayToEnum(date: number): DayOfWeek {
+export function dayToSchemaEnt(date: number): string {
     if (date > 7 || date < 1) throw new Error("Date number is out of bounds!")
 
     switch(date) {
         case 1:
-            return DayOfWeek.SATURDAY
+            return 'sun'
             break
         case 2:
-            return DayOfWeek.MONDAY
+            return 'mon'
             break
         case 3:
-            return DayOfWeek.TUESDAY
+            return 'tues'
             break
         case 4:
-            return DayOfWeek.WEDNESDAY
+            return 'wed'
             break
         case 5:
-            return DayOfWeek.THURSDAY
+            return 'thu'
             break
         case 6:
-            return DayOfWeek.FRIDAY
+            return 'fri'
             break
         case 7:
-            return DayOfWeek.SATURDAY
+            return 'sat'
             break
     }
 }
@@ -78,19 +84,43 @@ export type schema$dailyReport = {
 }
 
 export type schema$weeklyReport = {
-    sun?: schema$dailyReport,
-    mon?: schema$dailyReport,
-    tue?: schema$dailyReport,
-    wed?: schema$dailyReport,
-    thu?: schema$dailyReport,
-    fri?: schema$dailyReport,
+    sun?: schema$dailyReport
+    mon?: schema$dailyReport
+    tue?: schema$dailyReport
+    wed?: schema$dailyReport
+    thu?: schema$dailyReport
+    fri?: schema$dailyReport
     sat?: schema$dailyReport
 }
 
+export enum ManagerType {
+    EVENTS = 'EVENTS',
+    GIVEAWAYS = 'GIVEAWAYS'
+}
+
+export type ManagerReport = {
+    user_id: string
+    type: ManagerType
+    eligibleStatus: boolean
+    currentWeekReport: schema$weeklyReport
+}
+
+// last 2 reports are to be shown
 export type schema$BaseManager = {
-    user_id: string,
+    user_id: string
+    type: ManagerType
+    on_break: number // unix time
     current_weekly_report: schema$weeklyReport
     last_weekly_report: schema$weeklyReport
+    reports: []
+}
+
+export type schema$WeeklyStats = {
+    week_of: number // UNIX time
+    managers_gained: number
+    managers_lost: number
+    managers_filled: number
+    managers_falling_behind: number
 }
 
 export const events = db.collection("event_managers")
@@ -101,96 +131,140 @@ function getDaysBeforeToday(unix: number, days: number): number {
     return unix - (SINGLE_DAY * days)
 }
 
-function getUnixSeconds(): number {
-    return Math.floor(Date.now() / 1000)
+function getDayOfCurrentWeek(day: DayOfWeek): number {
+    const d = new Date()
+    
+    d.setHours(0)
+    d.setMinutes(0)
+    d.setSeconds(0)
+    
+    if (d.getDay() == day) { /* do nothing */ }
+    else if (d.getDay() > day) d.setDate(d.getDate() - (d.getDay() - day))
+    else d.setDate(d.getDate() - (day - d.getDay()))
+
+    return Math.floor(d.getTime() / 1000)
 }
 
-function getCurrentDayOfWeek(): number {
-    return new Date().getDay()
-}
-
-export async function initManager(user: User, type: 'EVENTS' | 'GIVEAWAYS') {
-    if (type == 'EVENTS') {
-        let ins: schema$BaseManager = {
-            user_id: user.id,
-            current_weekly_report: {
-                sun: {
-                    day: getDaysBeforeToday(getUnixSeconds(), getCurrentDayOfWeek),
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                mon: {
-                    day: 2,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                tue: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                wed: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                thu: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                fri: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                sat: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                }
+function genBaseManagerSchema(userId: string, type: ManagerType): schema$BaseManager {
+    return {
+        user_id: userId,
+        type: type,
+        current_weekly_report: {
+            sun: {
+                day: getDayOfCurrentWeek(DayOfWeek.SUNDAY),
+                day_of_week: 1,
+                quota_filled: 0
             },
-            last_weekly_report: {
-                sun: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                mon: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                tue: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                wed: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                thu: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                fri: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                },
-                sat: {
-                    day: 0,
-                    day_of_week: 0,
-                    quota_filled: 0
-                }
+            mon: {
+                day: getDayOfCurrentWeek(DayOfWeek.MONDAY),
+                day_of_week: 2,
+                quota_filled: 0
+            },
+            tue: {
+                day: getDayOfCurrentWeek(DayOfWeek.TUESDAY),
+                day_of_week: 3,
+                quota_filled: 0
+            },
+            wed: {
+                day: getDayOfCurrentWeek(DayOfWeek.WEDNESDAY),
+                day_of_week: 4,
+                quota_filled: 0
+            },
+            thu: {
+                day: getDayOfCurrentWeek(DayOfWeek.THURSDAY),
+                day_of_week: 5,
+                quota_filled: 0
+            },
+            fri: {
+                day: getDayOfCurrentWeek(DayOfWeek.FRIDAY),
+                day_of_week: 6,
+                quota_filled: 0
+            },
+            sat: {
+                day: getDayOfCurrentWeek(DayOfWeek.SATURDAY),
+                day_of_week: 7,
+                quota_filled: 0
             }
-        }
-
-        
-    } else if (type == 'GIVEAWAYS') {
-
+        },
+        last_weekly_report: null,
+        reports: []
     }
+}
+
+export async function initManager(user: User, type: ManagerType) {
+    await events.insertOne(genBaseManagerSchema(user.id, type) as schema$BaseManager)
+}
+
+export async function setManagerDayQuota(user: User, type: ManagerType, filledCount: number, options?: { day?: DayOfWeek, action?: 'INC' | 'DEC' | 'SET' }) {
+    const day: DayOfWeek = options ? options.day || new Date().getDay() : new Date().getDay()
+    const act = options ? options.action || 'SET' : 'SET'
+
+    switch(act) {
+        case 'SET':
+            if (type == ManagerType.EVENTS) {
+                await events.updateOne({ user_id: user.id }, {
+                    $set: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: filledCount
+                    }
+                })
+            } else {
+                await giveaways.updateOne({ user_id: user.id }, {
+                    $set: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: filledCount
+                    }
+                })
+            }
+            break
+        case 'INC':
+            if (type == ManagerType.EVENTS) {
+                await events.updateOne({ user_id: user.id }, {
+                    $inc: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: filledCount
+                    }
+                })
+            } else {
+                await giveaways.updateOne({ user_id: user.id }, {
+                    $inc: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: filledCount
+                    }
+                })
+            }
+            break
+        case 'DEC':
+            if (type == ManagerType.EVENTS) {
+                await events.updateOne({ user_id: user.id }, {
+                    $inc: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: -filledCount
+                    }
+                })
+            } else {
+                await giveaways.updateOne({ user_id: user.id }, {
+                    $inc: {
+                        [`current_weekly_report.${dayToSchemaEnt(day)}`]: -filledCount
+                    }
+                })
+            }
+            break
+    }
+}
+
+export async function isUserManager(user: User): Promise<boolean> {
+    return !!(await events.findOne({ user_id: user.id })) || !!(await giveaways.findOne({ user_id: user.id }))
+}
+
+export function generateReport(manager: schema$BaseManager): ManagerReport {
+    const ret: ManagerReport = {
+        user_id: manager.user_id,
+        type: manager.type,
+        eligibleStatus: undefined,
+        currentWeekReport: manager.current_weekly_report
+    }
+    const req = manager.type == ManagerType.EVENTS ? MANAGER_REQUIREMENTS.events : MANAGER_REQUIREMENTS.giveaways
+    let totalQuotaFilled: number = 0
+    Object.values(manager.current_weekly_report).forEach(dailyReport => totalQuotaFilled += dailyReport.quota_filled)
+
+    if (totalQuotaFilled >= totalQuotaFilled) ret.eligibleStatus = true
+    else ret.eligibleStatus = false
+
+    return ret
 }

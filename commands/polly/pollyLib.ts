@@ -89,7 +89,6 @@ export async function staticBlock() {
 
     // we need status
     client.user.setStatus('idle')
-    client.user.setActivity({ name: 'general for cookies', type: 'COMPETING' })
 
     loop()
 }

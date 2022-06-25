@@ -15,8 +15,8 @@ export async function staticBlock() {
         if (m.mentions.everyone || (m.cleanContent.includes('@here') && m.member.permissionsIn(m.channel as TextChannel).has(Permissions.FLAGS.MENTION_EVERYONE))) {
             pingList.set(m.author.id, (pingList.get(m.author.id) ?? 0) + 1)
 
-            if (pingList.get(m.author.id) >= tolerance || m.member.roles.cache.some(r => managerRoles.includes(r.id))) {
-                try { await m.member.ban({ reason: `everyone ping tolerance exceeded threshold.`, days: 1 }) }
+            if (pingList.get(m.author.id) >= tolerance || (m.member.roles.cache.some(r => managerRoles.includes(r.id)) && !m.member.roles.cache.has('791516118120267806'))) {
+                try { await m.member.ban({ reason: `everyone ping tolerance exceeded threshold.` }) }
                 catch {}
             }
 

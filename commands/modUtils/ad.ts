@@ -8,7 +8,7 @@ const CONTENT = ["discord.gg/merchants", ".gg/merchants"]
 client.on('presenceUpdate', async (oldStatus, newStatus) => {
     if (newStatus.user.bot || newStatus.guild.id != '784491141022220309') return
     let hasContentInStatus = false
-    if ((oldStatus as Presence).member.roles.cache.has(PREMIUM_ROLE)) {
+    if ((newStatus as Presence).member.roles.cache.has(PREMIUM_ROLE)) {
         for (const status of newStatus.activities) {
             if (status.type == 'CUSTOM') {
                 if (!status.state) {

@@ -62,6 +62,10 @@ export const slashCommand = new SlashCommandBuilder()
     .addUserOption(o => o.setName("donor").setDescription("The donor of the event").setRequired(false))
 
 export async function execute(i: CommandInteraction) {
+    await i.reply({
+        content: "Command disabled!",
+        ephemeral: true
+    })
     if (!(i.member as GuildMember).roles.cache.some(v => authRoles.includes(v.id))) {
         await i.reply({ content: "You are not authorized to run this command!", ephemeral: true })
         return

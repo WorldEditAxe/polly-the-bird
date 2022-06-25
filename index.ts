@@ -290,6 +290,7 @@ async function walk(path: string): Promise<void> {
             await walk(dir)
         } else {
             if (dir.endsWith(".js") || dir.endsWith(".ts") || dir.endsWith(".tsx")) {
+                logger.debug(`Started loading of file ${dir}.`)
                 const imp = await import(dir)
 
                 if (imp.staticBlock != undefined) {
