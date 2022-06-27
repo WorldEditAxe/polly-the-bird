@@ -117,7 +117,7 @@ export async function execute(i: CommandInteraction) {
                 if (message.attachments.new.length > 0) str += `**New Attachments: ** ${getAttachmentString(message.attachments.new, true)}\n`
 
                 str += `**Old Content:** ${message.oldContent ? message.oldContent.length > (256 - str.length) ? message.oldContent.slice(0, 256 - str.length) + '...' : message.oldContent : message.oldContent.length <= 256 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}\n`
-                str += `**New Content:** ${message.oldContent ? message.oldContent.length > (1000 - str.length) ? message.oldContent.slice(0, 1000 - str.length) + '...' : message.oldContent : message.oldContent.length <= 1000 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}`
+                str += `**New Content:** ${message.newContent ? message.newContent.length > (1000 - str.length) ? message.newContent.slice(0, 1000 - str.length) + '...' : message.newContent : message.newContent.length <= 1000 - str.length + 37 ? "<nothing, possible embed/attachment?>" : ''}`
 
                 emb.addFields({
                     name: `#${msg.indexOf(message) + 1} [${message.type}]`,
@@ -141,6 +141,7 @@ export async function execute(i: CommandInteraction) {
         const m = msg[0]
 
         if (m.type == 'DELETED') {
+            console.log(m.deleteTime)
             const emb = new MessageEmbed()
                 .setColor('DARK_RED')
                 .setTitle(`Message deleted in channel #${i.channel.name}`)
