@@ -7,7 +7,7 @@ const disallowedPhrases = [
     'nigga',
     'nigger',
     'niger',
-
+    'badname'
 ]
 const dc = decancer as any
 const nickChangeTol = 0.75
