@@ -1,5 +1,6 @@
 import { ButtonInteraction, Client, GuildMember, MessageActionRow, MessageButton, MessageEmbed, TextChannel, User } from "discord.js"
 import { handleError } from "../errorLogger.js"
+import { isStringDirty } from "./automod/automod_utils.js"
 import { lockDown } from "./lockdown.js"
 
 let heistMode = false
@@ -39,7 +40,7 @@ cachedHeistEmbed
         .setColor('#f2da2d')
 
 client.on('guildMemberAdd', async m => {
-    if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown) return
+    if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown || isStringDirty(m.user.username)) return
 
     if (!heistMode) {
         // no heist mode 
@@ -209,5 +210,5 @@ async function dmUser(user: User) {
                     )
             ]
         })
-    } catch (e) { console.log(e.stack) } 
+    } catch (e) {} 
 }

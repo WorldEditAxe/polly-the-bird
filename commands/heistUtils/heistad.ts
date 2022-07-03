@@ -28,7 +28,7 @@ export async function execute(i: CommandInteraction) {
                                     + `\n:trophy:୨ ⨯ LOTS of massive giveaways ongoing! (crown, tros, bolts)`
                                     + `\n:money_mouth: ୨ ⨯  Daily 30 million heist everyday!**`
                                     + "\n`Invite link:` https://discord.gg/TA9twYKey3")
-                .addField("Shero heist ad command", `\`\`\`\nDadvertise **__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(#🏦┃heist)**`
+                .addField("Shero heist ad command", `\`\`\`\nDadvertise heist **__Dank Merchants__**\n**\n💸୨ ⨯ \`⏣ ${prettify(heist_amt)}\` (${shortenAmount(heist_amt)}) heist\n:timer:୨ ⨯  Starts <t:${Math.floor(Date.now() / 1000) + time_str}:R> in <#931590909500481538> **(#🏦┃heist)**`
                         + `\n:trophy:୨ ⨯ LOTS of massive giveaways ongoing! (crown, tros, bolts)`
                         + `\n:money_mouth: ୨ ⨯  Daily 30 million heist everyday!**`
                         + "\n`Invite link:` https://discord.gg/TA9twYKey3\n\`\`\`")

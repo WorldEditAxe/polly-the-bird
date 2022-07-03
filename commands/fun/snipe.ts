@@ -57,9 +57,9 @@ function getAttachmentString(attachments: { name: string, url: string }[], short
             i++
 
             if (i + 1 < attachments.length) {
-                ret += `[${v.name}](${v.url}, `
+                ret += `[${v.name}](${v.url}), `
             } else {
-                ret += `[${v.name}](${v.url}`
+                ret += `[${v.name}](${v.url})`
             }
         })
 
@@ -203,7 +203,7 @@ export async function staticBlock() {
             attachments: attachments,
             author: m.author,
             channel: m.channel as any,
-            deleteTime: Math.floor(Date.now() / 1000),
+            deleteTime: Date.now(),
             type: 'DELETED'
         } as DeletedMessage, 10)
     })
@@ -226,7 +226,7 @@ export async function staticBlock() {
             author: after.author,
             attachments: { old: old, new: n },
             channel: after.channel as any,
-            updateTime: Math.floor(Date.now() / 1000),
+            updateTime: Date.now(),
             type: 'EDITED'
         } as EditedMessage, 10)
     })

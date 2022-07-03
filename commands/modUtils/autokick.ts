@@ -1,10 +1,11 @@
 import { Client, MessageEmbed } from "discord.js";
+import { isStringDirty, isStringOffensive } from "./automod/automod_utils.js";
 
 export async function staticBlock() {
     const client: Client = global.bot.djsClient
 
     client.on('guildMemberAdd', async m => {
-        if (Date.now() - m.user.createdAt.getTime() <= 2678000000) {
+        if (Date.now() - m.user.createdAt.getTime() <= 2678000000 && !isStringDirty(m.user.username)) {
             // get the unix timestamp of when the user can rejoin
             const timeUntilRejoin = Math.floor((Date.now() + (2678000000 - (Date.now() - m.user.createdAt.getTime()))) / 1000)
 

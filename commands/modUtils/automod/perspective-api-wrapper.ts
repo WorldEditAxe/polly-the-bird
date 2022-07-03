@@ -7,7 +7,8 @@ export enum CommentAttributes {
     IDENTITY_ATTACK = 'IDENTITY_ATTACK',
     INSULT = 'INSULT',
     PROFANITY = 'PROFANITY',
-    THREAT = 'THREAT'
+    THREAT = 'THREAT',
+    SEXUAL = 'SEXUALLY_EXPLICIT'
 }
 
 export type langCodes = 'ar'
@@ -30,12 +31,13 @@ export type langCodes = 'ar'
 
 export type AnalyzeCommentOptions = {
     requested_attributes?: {
-        [CommentAttributes.IDENTITY_ATTACK]?: { score_type: "PROBABILITY", score_threashold: number },
-        [CommentAttributes.INSULT]?: { score_type: "PROBABILITY", score_threashold: number },
-        [CommentAttributes.PROFANITY]?: { score_type: "PROBABILITY", score_threashold: number },
-        [CommentAttributes.SEVERE_TOXICITY]?: { score_type: "PROBABILITY", score_threashold: number },
-        [CommentAttributes.THREAT]?: { score_type: "PROBABILITY", score_threashold: number },
-        [CommentAttributes.TOXICITY]?: { score_type: "PROBABILITY", score_threashold: number }
+        [CommentAttributes.IDENTITY_ATTACK]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.INSULT]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.PROFANITY]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.SEVERE_TOXICITY]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.THREAT]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.TOXICITY]?: { score_type: "PROBABILITY", score_threshold: number },
+        [CommentAttributes.SEXUAL]?: { score_type: "PROBABILITY", score_threshold: number }
     },
     span_annotations?: boolean,
     languages?: langCodes[],
@@ -46,9 +48,51 @@ export type AnalyzeCommentOptions = {
 }
 
 export type AnalyzeCommentResponse = {
-    attribute_scores: {
+    attributeScores: {
         [CommentAttributes.IDENTITY_ATTACK]?: {
-            summary_score: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.INSULT]?: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.PROFANITY]?: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.SEVERE_TOXICITY]?: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.THREAT]?: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.TOXICITY]?: {
+            summaryScore: {
+                value: number,
+                type: string,
+                span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
+            }
+        },
+        [CommentAttributes.SEXUAL]?: {
+            summaryScore: {
                 value: number,
                 type: string,
                 span_scores?: { begin: number, end: number, score: { value: number, type: string } }[]
@@ -56,12 +100,12 @@ export type AnalyzeCommentResponse = {
         }
     },
     languages: langCodes[],
-    client_token?: string
+    clientToken?: string
 }
 
 const MAX_LENGTH = 20480;
 
-function post(hostname: string, path: string, body: string, headers: NodeJS.Dict<OutgoingHttpHeader>, errorCodes?: number[]): Promise<string> {
+function post(hostname: string, path: string, body: string, headers: NodeJS.Dict<OutgoingHttpHeader>): Promise<string> {
     return new Promise<string>((resolve, rej) => {
         const options: RequestOptions = {
             hostname: hostname,
@@ -71,14 +115,10 @@ function post(hostname: string, path: string, body: string, headers: NodeJS.Dict
             headers: headers
         }
         const req = request(options, res => {
-            if (errorCodes.some(code => code == res.statusCode)) {
-                rej(res.statusCode)
-            } else {
-                let data = ''
-                res.on('data', d => data += d)
-                res.on('error', rej)
-                res.on('end', () => resolve(data))
-            }
+            let data = ''
+            res.on('data', d => data += d)
+            res.on('error', rej)
+            res.on('end', () => resolve(data))
         })
 
         req.on('error', rej)
@@ -102,7 +142,10 @@ export async function analyzeComment(text: string, key: string, options: Analyze
         community_id: options.community_id
     }), {
         key: key
-    }, [403])
+    })
 
-    return JSON.parse(req) as any
+    const p = JSON.parse(req)
+    
+    if (p.error) throw new Error(p.error)
+    else return p
 }

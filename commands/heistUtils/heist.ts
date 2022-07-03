@@ -18,13 +18,13 @@ export const slashCommand = new SlashCommandBuilder()
     .setDescription('Turn on heist mode')
     .addSubcommand(s => s.setName('enable').setDescription('Enable heist mode'))
     .addSubcommand(s => s.setName('disable').setDescription('Disable heist mode')
-        .addBooleanOption(o => o.setName('ban_freeloaders').setDescription("Determines whether to ban freeloaders or not")))
+        .addBooleanOption(o => o.setName('dump_freeloaders').setDescription("Determines whether to dump freeloaders to a text file.").setRequired(true)))
 
 export async function execute(i: CommandInteraction) {
     if (!i.guild) return await i.reply({ content: "I don't know what made you think this but you need to run this in a server??", ephemeral: true })
     if (!(i.member.permissions as Readonly<Permissions>).has(Permissions.FLAGS.MANAGE_MESSAGES)) return await i.reply({ content: "You are missing the permission 'Manage Messages' required to run this command!", ephemeral: true })
     const mode = i.options.getSubcommand(true) == 'enable' ? true : false
-        , banFreeloaders = mode == false ? i.options.getBoolean('ban_freeloaders') : false
+        , banFreeloaders = mode == false ? i.options.getBoolean('dump_freeloaders') : false
     setHeistMode(mode)
     
     if (!banFreeloaders) {

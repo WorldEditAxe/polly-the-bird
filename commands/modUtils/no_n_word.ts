@@ -13,44 +13,11 @@ const bannedWords = [
     "ngger",
     "nlgga"
 ]
-
-const suicide = [
-    "i want to commit suicide",
-    "i want to go kill myself",
-    "i want to die"
-]
-
 const client: Client = global.bot.djsClient
 
 client.on('messageCreate', async m => {
     if (m.author.bot || !m.guild) return 
     const lowered = m.cleanContent.toLowerCase()
-
-    for (const w of suicide) {
-        if (lowered.includes(w)) {
-            try { await m.delete() }
-            catch {}
-
-            try {
-                await m.member.createDM()
-                await m.member.send({
-                    embeds: [
-                        new MessageEmbed()
-                            .setColor('#cf2d2d')
-                            .setAuthor({ name: "Suicide Prevention" })
-                            .setDescription("We want to let you know that you're never alone. Please check the below for suicide prevention resources.")
-                            .addFields(
-                                { name: "United States Suicide Hotline", value: "[Suicide Prevention Hotline](https://suicidepreventionlifeline.org/)\nPhone Number: 1-800-273-8255" },
-                                { name: "International Suicide Hotline", value: "[Suicide Prevention Hotlines](https://www.opencounseling.com/suicide-hotlines)\nThis is for those that do not currently reside (live) in the US. Look up and call the suicide prevention hotline for your country." }
-                            )
-                    ],
-                    content: `<@${m.author.id}>`
-                })
-
-                return
-            } catch {}
-        }
-    }
 
     for (const w of bannedWords) {
         if (lowered.includes(w)) {
