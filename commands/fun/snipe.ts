@@ -141,7 +141,6 @@ export async function execute(i: CommandInteraction) {
         const m = msg[0]
 
         if (m.type == 'DELETED') {
-            console.log(m.deleteTime)
             const emb = new MessageEmbed()
                 .setColor('DARK_RED')
                 .setTitle(`Message deleted in channel #${i.channel.name}`)
@@ -233,7 +232,7 @@ export async function staticBlock() {
 }
 
 function appendAndClamp(array: Array<any>, element: any, limit: number) {
-    if (array.length > limit) {
+    if (array.length >= limit) {
         array.unshift(element)
         array.pop()
     } else {
