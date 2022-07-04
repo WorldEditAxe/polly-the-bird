@@ -1,4 +1,5 @@
 import { Client, GuildMember, Permissions, TextChannel } from "discord.js"
+import { saveUserEntry } from "./db_wrapper.js"
 
 const GUILD_ID = '784491141022220309'
 
@@ -24,20 +25,6 @@ export type schema$baseGrant = {
     message?: string
 }
 
-export class Member {
-    user_id: string
-    grant_list: Readonly<BaseGrant[]>
-
-    constructor(dbEntry: schema$userEntry) {
-        this.user_id = dbEntry.user_id
-        this.grant_list = []
-
-        dbEntry.grant_list.forEach(grant => {
-            // TODO: work on    
-        })
-    }
-}
-
 export interface BaseGrant {
     grantUser: string
     type: GrantType
@@ -56,6 +43,53 @@ export type schema$roleGrant = {
     message?: string
     role_id: string,
     guild_id: string
+}
+
+export class UserEntry {
+    user: string
+    private grants: BaseGrant[]
+
+    constructor(user: string, grantList: schema$baseGrant[]) {
+        this.user = user
+        this.grants = []
+
+        grantList.forEach(grant => {
+            this.grants.push(dbUtils.parseGrant(grant))
+        })
+    }
+
+    getGrants(): Readonly<BaseGrant[]> {
+        return Object.freeze([...this.grants])
+    }
+
+    async addGrant(grant: BaseGrant) {
+        this.grants.push(grant)
+        await saveUserEntry(this)
+    }
+
+    async removeGrant(grant: BaseGrant | number) {
+        grant = typeof grant == 'number' ? grant : this.grants.indexOf(grant)
+        if (!grant) return
+        this.grants.splice(grant, 1)
+        await saveUserEntry(this)
+    }
+
+    async updateGrant(grant: BaseGrant | number, changes: (grant: BaseGrant) => void | any) {
+        grant = typeof grant == 'number' ? this.grants[grant] : grant
+        if (!grant) throw new Error("The passed grant is either null or points to a null index!")
+        changes(grant)
+        await saveUserEntry(this)
+    }
+
+    toObject(): schema$userEntry {
+        const p: schema$baseGrant[] = []
+        this.grants.forEach(grant => p.push(grant.toObject() as any))
+
+        return {
+            user_id: this.user,
+            grant_list: p
+        } as schema$userEntry
+    }
 }
 
 export class RoleGrant implements BaseGrant {
