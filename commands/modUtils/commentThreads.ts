@@ -10,7 +10,8 @@ const pingIds = [
     '848039592140865577',
     '879439271096893480',
     '883734468341403669',
-    '892383997836009482'
+    '892383997836009482',
+    '972079339032162304'
 ]
 
 export async function staticBlock() {
@@ -25,7 +26,7 @@ export async function staticBlock() {
                         new MessageEmbed()
                             .setTitle("Staff Shitpost Thread")
                             .setColor('#4573ed')
-                            .setDescription(`Comment on a post sent by a staff member.\nPlease read the server rules at <#787343840108478474> prior to posting.`)
+                            .setDescription(`Comment on a post sent by a staff member.\nPlease read the server rules at <#787343840108478474> prior to commenting.`)
                             .setTimestamp()
                     ]
                 })
