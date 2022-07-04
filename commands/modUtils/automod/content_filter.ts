@@ -1,13 +1,11 @@
 import { Client, Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import { isStringOffensive } from "./automod_utils.js";
-import { analyzeComment, CommentAttributes } from "./perspective-api-wrapper.js";
+import { analyzeComment, CommentAttributes } from "./api-wrapper.js";
 
 const client: Client = global.bot.djsClient
 const GUILD_ID = '784491141022220309'
 const BROADCAST_ID = '991980819499450459'
 const WHITELISTED_ROLE_IDS = ['791516118120267806']
-const TRIGGER_TOL = 0.70
-const PERSPECTIVE_TOKEN = process.env.PERSPECTIVE_TOKEN
 const broadcastChan = await client.channels.fetch(BROADCAST_ID) as TextChannel
 const flaggedMessages = new Map<string, { link: string, content: string }[]>()
 const delId = "polly-delete-automod-alert-tag"

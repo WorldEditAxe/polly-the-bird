@@ -1,11 +1,17 @@
 import { Client, MessageEmbed } from "discord.js";
 import { lockDown } from "../lockdown.js";
-import { cleanString, getCleanForm, isStringDirty, isStringOffensive } from "./automod_utils.js"
+import { cleanString, getCleanForm, isStringDirty, isStringOffensive, logModerationAction } from "./automod_utils.js"
 
 const client: Client = global.bot.djsClient
 const disallowed = [
     'hitler',
-    'nazi'
+    'nazi',
+    'shit',
+    'fuck',
+    'bitch',
+    'faggot',
+    'retard',
+    'cunt'
 ]
 const GUILD_ID = '784491141022220309'
 
@@ -23,6 +29,9 @@ client.on('guildMemberAdd', async member => {
             ]
         }).catch(() => {})
         await member.kick("Username contains objectionable content | Automated action.")
+        await logModerationAction("Join Blocked", member.user, "Objectionable content detected in nickname.", undefined, [{
+            name: "Tag", value: `**${member.user.tag}** (\`${member.user.id}\`)`, inline: true
+        }])
         return
     }
 
@@ -34,9 +43,22 @@ client.on('guildMemberAdd', async member => {
 
 client.on('guildMemberUpdate', async (ignore, member) => {
     if (!member.nickname) return
-    if (isStringDirty(member.displayName, disallowed) && member.manageable) await member.setNickname("Bad Nickname")
+    const op = member.nickname
+    if (isStringDirty(member.nickname, disallowed) && member.manageable) {
+        await member.setNickname("Bad Nickname")
+        await logModerationAction("Nickname Reset", member.user, "Nickname has objectionable content.", undefined, [{
+            name: "Previous Nickname", value: op, inline: true
+        }])
+        return
+    }
     const cleaned = cleanString(member.nickname)
-    if (cleaned != member.nickname && member.manageable) await member.setNickname(getCleanForm(cleaned))
+    if (cleaned != member.nickname && member.manageable) {
+        await member.setNickname(getCleanForm(cleaned))
+        await logModerationAction("Decancered Nickname", member.user, "Nickname is cancerous.", undefined, [
+            { name: "Previous Nickname", value: op, inline: true },
+            { name: "New Nickname", value: member.nickname, inline: true }
+        ])
+    }
 })
 
 client.on('userUpdate', async (ignore, user) => {
@@ -54,6 +76,7 @@ client.on('userUpdate', async (ignore, user) => {
                         ]
                     }).catch(() => {})
                     await member.kick("Username contains objectionable content | Automated action.")
+                    await logModerationAction("Kick", user, "Bad Username", undefined)
                 }
             })
             .catch(() => {})
