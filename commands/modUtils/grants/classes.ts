@@ -1,7 +1,16 @@
-import { Client, GuildMember, Permissions, TextChannel } from "discord.js"
+import { Client, Permissions, TextChannel } from "discord.js"
 import { saveUserEntry } from "./db_wrapper.js"
 
 const GUILD_ID = '784491141022220309'
+
+export const ALLOWED_ROLES = [
+    '784527745539375164', // moderator
+    '789642191583838208', // smod
+    '789642191521316884', // hmod
+    '784492058756251669', // admin
+    '788738305365114880', // co-owner
+    '784528018939969577', // owner
+]
 
 export enum GrantType {
     ROLE_GRANT = "role_grant",
@@ -69,14 +78,14 @@ export class UserEntry {
 
     async removeGrant(grant: BaseGrant | number) {
         grant = typeof grant == 'number' ? grant : this.grants.indexOf(grant)
-        if (!grant) return
+        if (!((grant as any) >= 0)) throw new Error("Cannot find grant in array!")
         this.grants.splice(grant, 1)
         await saveUserEntry(this)
     }
 
     async updateGrant(grant: BaseGrant | number, changes: (grant: BaseGrant) => void | any) {
         grant = typeof grant == 'number' ? this.grants[grant] : grant
-        if (!grant) throw new Error("The passed grant is either null or points to a null index!")
+        if (!((grant as any) >= 0)) throw new Error("The passed grant is either null or points to a null index!")
         changes(grant)
         await saveUserEntry(this)
     }
@@ -103,7 +112,7 @@ export class RoleGrant implements BaseGrant {
     constructor(dbGrant: schema$roleGrant) {
         this.grantUser = dbGrant.owner
         this.type = dbGrant.grant_type
-        this.expiryDate = dbGrant.expiry_time ? new Date(dbGrant.expiry_time * 1000) : null
+        this.expiryDate = dbGrant.expiry_time != null ? new Date(dbGrant.expiry_time * 1000) : null
         this.message = dbGrant.message || null
     }
     async onGrant(): Promise<void> {
@@ -147,7 +156,7 @@ export class EmojiARGrant implements BaseGrant {
     constructor(dbObj: schema$emojiARGrant) {
         this.grantUser = dbObj.owner
         this.type = dbObj.grant_type
-        this.expiryDate = dbObj.expiry_time ? new Date(dbObj.expiry_time * 1000) : null
+        this.expiryDate = dbObj.expiry_time != null ? new Date(dbObj.expiry_time * 1000) : null
         this.message = dbObj.message || null
         this.emoji_id = dbObj.emoji_id
     }
@@ -186,7 +195,7 @@ export class TextARGrant implements BaseGrant {
     constructor(obj: schema$textARGrant) {
         this.grantUser = obj.owner
         this.type = obj.grant_type
-        this.expiryDate = obj.expiry_time ? new Date(obj.expiry_time * 1000) : null
+        this.expiryDate = obj.expiry_time != null ? new Date(obj.expiry_time * 1000) : null
     }
     onGrant(): void | Promise<void> {
         // do nothing
@@ -227,7 +236,7 @@ export class PrivateChannelGrant implements BaseGrant {
     constructor(obj: schema$privateChannelGrant) {
         this.grantUser = obj.owner
         this.type = obj.grant_type
-        this.expiryDate = obj.expiry_time ? new Date(obj.expiry_time * 1000) : null
+        this.expiryDate = obj.expiry_time !=  null ? new Date(obj.expiry_time * 1000) : null
         this.message = obj.message
         this.channelName = obj.channel_name
         this.channelId = obj.channel_id

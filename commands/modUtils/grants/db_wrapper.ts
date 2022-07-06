@@ -1,4 +1,5 @@
-import { User } from "discord.js";
+import { Snowflake, User } from "discord.js";
+import { FindCursor, WithId } from "mongodb";
 import { awaitStart, getDb } from "../../database.js";
 import { schema$userEntry, UserEntry } from "./classes.js";
 
@@ -16,9 +17,25 @@ export async function getUser(user: User | string): Promise<UserEntry> {
 }
 
 export async function saveUserEntry(entry: UserEntry) {
-    await db.updateOne({
+    await db.replaceOne({
         user_id: entry.user
     }, entry.toObject(), {
         upsert: true
     })
+}
+
+export async function saveUserEntryRaw(entry: schema$userEntry) {
+    await db.replaceOne({
+        user_id: entry.user_id
+    }, entry, {
+        upsert: true
+    })
+}
+
+export function massFetch(ids: Snowflake[]): Promise<schema$userEntry[]> {
+    return db.find({ user_id: { $in: ids } }).limit(3).toArray() as any
+}
+
+export function getAll(): FindCursor<WithId<schema$userEntry>> {
+    return db.find() as any
 }
