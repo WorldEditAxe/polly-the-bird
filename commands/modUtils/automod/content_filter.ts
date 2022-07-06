@@ -37,7 +37,10 @@ async function handleFlagged(m: Message) {
             link: m.url
         }
         arr.push(ent)
-        setTimeout(() => arr.filter(v => v != ent), 60 * 10 * 1000)
+        setTimeout(() => {
+            const index = arr.indexOf(ent)
+            if (index) arr.splice(index, 1)
+        }, 60 * 10 * 1000)
         if (arr.length >= 3) {
             await broadcastChan.send({
                 embeds: [
