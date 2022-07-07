@@ -8,6 +8,7 @@ await awaitStart()
 const client: Client = global.bot.djsClient
 
 client.on('messageCreate', async msg => {
+    if (!msg.guild) return
     if (msg.guild.id != '784491141022220309') return
     if (msg.mentions.members.size <= 0) return
     if (!(msg.channel as TextChannel).permissionsFor(client.user).has(Permissions.FLAGS.ADD_REACTIONS) || !(msg.channel as TextChannel).permissionsFor(client.user).has(Permissions.FLAGS.SEND_MESSAGES)) return
