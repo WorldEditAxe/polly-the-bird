@@ -51,7 +51,7 @@ client.on('guildMemberUpdate', async (ignore, member) => {
         }])
         return
     }
-    const cleaned = cleanString(member.nickname)
+    const cleaned = cleanString(member.nickname, true)
     if (cleaned != member.nickname && member.manageable) {
         await member.setNickname(getCleanForm(cleaned))
         await logModerationAction("Decancered Nickname", member.user, "Nickname is cancerous.", undefined, [

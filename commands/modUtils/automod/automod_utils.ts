@@ -45,10 +45,15 @@ export function unleetspeak(str: string): string {
         .toLowerCase()
 }
 
-export function cleanString(dirty: string): string {
+export function cleanString(dirty: string, isNick?: boolean): string {
+    let appendAfk = false
+    if (isNick && dirty.startsWith("[AFK] ")) {
+        appendAfk = true
+        dirty = dirty.replace('[AFK] ', '')
+    }
     const clean = getCleanForm(decancerString(dirty)), percentSimilar = compareTwoStrings(clean, dirty)
-    if (percentSimilar < SEND_DC_STRING_TOL) return clean
-    else return dirty
+    if (percentSimilar < SEND_DC_STRING_TOL) return appendAfk ? "[AFK] " + clean : clean
+    else return appendAfk ? "[AFK] " + dirty : dirty
 }
 
 export async function isStringOffensive(text: string): Promise<boolean> {
