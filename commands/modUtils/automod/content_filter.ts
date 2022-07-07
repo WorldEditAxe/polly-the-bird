@@ -1,6 +1,7 @@
 import { Client, Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import { isStringOffensive } from "./automod_utils.js";
 import { analyzeComment, CommentAttributes } from "./api-wrapper.js";
+import { randomUUID } from "crypto";
 
 const client: Client = global.bot.djsClient
 const GUILD_ID = '784491141022220309'
@@ -13,6 +14,7 @@ const delId = "polly-delete-automod-alert-tag"
 client.on('messageCreate', async m => {
     if (m.guildId != GUILD_ID || !m.content || m.author.bot || m.author.system) return
     if (m.member.roles.cache.some(r => WHITELISTED_ROLE_IDS.includes(r.id))) return
+    (m as any).tok = randomUUID()
     if (await isStringOffensive(m.content)) await handleFlagged(m)
 })
 
@@ -24,6 +26,7 @@ client.on('interactionCreate', async i => {
 })
 
 async function handleFlagged(m: Message) {
+    console.log(`handling token ${(m as any).tok}`)
     let arr = flaggedMessages.get(m.author.id)
     if (!arr) {
         const t1 = []
@@ -41,7 +44,7 @@ async function handleFlagged(m: Message) {
             const index = arr.indexOf(ent)
             if (index) arr.splice(index, 1)
         }, 60 * 10 * 1000)
-        if (arr.length >= 3) {
+        if (arr.length == 3) {
             await broadcastChan.send({
                 embeds: [
                     new MessageEmbed()
