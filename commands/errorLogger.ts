@@ -30,12 +30,12 @@ export async function staticBlock() {
     })
 }
 
-export async function handleError(e) {
+export async function handleError(e, customTitle?: string) {
     try {
         await webhook.send({      
             embeds: [
                 new MessageEmbed()
-                    .setTitle(`Command Error`)
+                    .setTitle(customTitle || `Command Error`)
                     .setColor('#ff5959')
                     .setDescription(`\`\`\`js\n${e.stack}\n\`\`\``)
                     .setTimestamp()
