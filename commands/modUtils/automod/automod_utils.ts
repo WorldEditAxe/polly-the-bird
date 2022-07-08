@@ -14,8 +14,8 @@ const dc = decancer as any
 
 const LOGGING_CHANNEL_ID = '992988890510135306'
 const perspectiveToken = process.env.PERSPECTIVE_TOKEN
-const SEND_DC_STRING_TOL = 0.5
-const OFFENSIVE_TOL = 0.60
+const SEND_DC_STRING_TOL = 0.6
+const OFFENSIVE_TOL = 0.75
 
 const chan: TextChannel = await (global.bot.djsClient as Client).channels.fetch(LOGGING_CHANNEL_ID) as any
 
