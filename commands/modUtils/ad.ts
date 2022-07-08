@@ -2,7 +2,7 @@ import { Client, Presence } from "discord.js";
 
 const client: Client = global.bot.djsClient
 
-const PREMIUM_ROLE = '822534119916437616' // placeholder, change to actual role when? this is the id of the me > you role
+const PREMIUM_ROLE = '785344908374310912' // placeholder, change to actual role when? this is the id of the me > you role
 const CONTENT = ["discord.gg/merchants", ".gg/merchants"]
 
 client.on('presenceUpdate', async (oldStatus, newStatus) => {

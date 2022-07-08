@@ -15,7 +15,7 @@ const dc = decancer as any
 const LOGGING_CHANNEL_ID = '992988890510135306'
 const perspectiveToken = process.env.PERSPECTIVE_TOKEN
 const SEND_DC_STRING_TOL = 0.5
-const OFFENSIVE_TOL = 0.75
+const OFFENSIVE_TOL = 0.60
 
 const chan: TextChannel = await (global.bot.djsClient as Client).channels.fetch(LOGGING_CHANNEL_ID) as any
 
@@ -51,7 +51,7 @@ export function cleanString(dirty: string, isNick?: boolean): string {
         appendAfk = true
         dirty = dirty.replace('[AFK] ', '')
     }
-    const clean = getCleanForm(decancerString(dirty)), percentSimilar = compareTwoStrings(clean, dirty)
+    const clean = getCleanForm(decancerString(dirty)), percentSimilar = compareTwoStrings(clean.toLowerCase(), dirty.toLowerCase())
     if (percentSimilar < SEND_DC_STRING_TOL) return appendAfk ? "[AFK] " + clean : clean
     else return appendAfk ? "[AFK] " + dirty : dirty
 }
