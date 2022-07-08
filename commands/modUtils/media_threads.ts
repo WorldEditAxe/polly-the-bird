@@ -5,7 +5,7 @@ const client: Client = global.bot.djsClient
 
 client.on('messageCreate', async msg => {
     if (msg.channelId != MEDIA_CHANNEL) return
-    if (msg.attachments.size <= 0) {
+    if (msg.attachments.size <= 0 && !msg.content.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/gmi)) {
         await msg.delete().catch(() => {})
         return
     }
