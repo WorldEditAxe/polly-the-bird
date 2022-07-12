@@ -56,7 +56,7 @@ client.on('guildMemberUpdate', async (ignore, member) => {
         await member.setNickname(getCleanForm(cleaned))
         await logModerationAction("Decancered Nickname", member.user, "Nickname is cancerous.", undefined, [
             { name: "Previous Nickname", value: op, inline: true },
-            { name: "New Nickname", value: member.nickname, inline: true }
+            { name: "New Nickname", value: member.nickname || "<none>", inline: true }
         ])
     }
 })
