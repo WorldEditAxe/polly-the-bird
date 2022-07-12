@@ -43,3 +43,11 @@ export async function handleError(e, customTitle?: string) {
         })
     } catch {}
 }
+
+export async function post(content: string | MessageEmbed[]) {
+    if (typeof content == 'string') {
+        await webhook.send(content).catch(() => {})
+    } else {
+        await webhook.send({ embeds: content }).catch(() => {})
+    }
+}
