@@ -6,9 +6,10 @@ const PREMIUM_ROLE = '994870138199355452' // placeholder, change to actual role 
 const CONTENT = ["discord.gg/merchants", ".gg/merchants"]
 
 client.on('presenceUpdate', async (oldStatus, newStatus) => {
-    if (newStatus.user.bot || newStatus.guild.id != '784491141022220309') return
+    const mbr = newStatus.member || await newStatus.guild.members.fetch(newStatus.userId)
+    if (mbr.user.bot || newStatus.guild.id != '784491141022220309') return
     let hasContentInStatus = false
-    if ((newStatus as Presence).member.roles.cache.has(PREMIUM_ROLE)) {
+    if (mbr.roles.cache.has(PREMIUM_ROLE)) {
         for (const status of newStatus.activities) {
             if (status.type == 'CUSTOM') {
                 if (!status.state) {
@@ -57,6 +58,6 @@ client.on('presenceUpdate', async (oldStatus, newStatus) => {
         }
     }
 
-    if (newStatus.member.roles.cache.has(PREMIUM_ROLE) && !hasContentInStatus) await newStatus.member.roles.remove(PREMIUM_ROLE).catch(() => {})
-    else if (hasContentInStatus) await newStatus.member.roles.add(PREMIUM_ROLE).catch(() => {})
+    if (mbr.roles.cache.has(PREMIUM_ROLE) && !hasContentInStatus) await mbr.roles.remove(PREMIUM_ROLE).catch(() => {})
+    else if (hasContentInStatus) await mbr.roles.add(PREMIUM_ROLE).catch(() => {})
 })
