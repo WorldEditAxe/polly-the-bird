@@ -1,7 +1,7 @@
 import { Client, Message, MessageEmbed, MessagePayload, TextChannel, WebhookClient } from "discord.js";
 import { Logger, ObjectId } from "mongodb";
 import { awaitStart, getDb } from "../../database.js";
-import { handleError } from "../../errorLogger.js";
+import { handleError, post } from "../../errorLogger.js";
 
 await awaitStart()
 
@@ -19,9 +19,11 @@ type DBSavelistEntry = {
 }
 
 export async function pinOnStarboard(msg: Message): Promise<string> {
+    const mbr = msg.member || await msg.guild.members.fetch(msg.author.id)
+
     const id = await webhook.send({
-        username: msg.member.displayName,
-        avatarURL: msg.member.displayAvatarURL(),
+        username: mbr.displayName,
+        avatarURL: mbr.displayAvatarURL(),
         content: msg.content || undefined,
         files: [...msg.attachments.values()],
         embeds: msg.embeds,
@@ -30,9 +32,10 @@ export async function pinOnStarboard(msg: Message): Promise<string> {
         .catch(error => {
             logger.error(`Error attempting to send starboard embed to starboard channel! Error: ${error.stacK}`)
             handleError(error, "Starboard Pin Error").catch(() => {})
+            post(JSON.stringify(msg)).catch(() => {})
         })
 
-    return (id as any).id as any
+    return id ? id.id : undefined
 }
 
 export async function removeFromStarboard(msg: Message | string) {
