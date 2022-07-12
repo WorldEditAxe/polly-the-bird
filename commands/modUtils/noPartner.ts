@@ -13,20 +13,20 @@ collector.on('collect', async (e, usr) => {
     if (e.emoji.id == '793151158281175064' && (member.roles.cache.has('784549344225263646') || member.roles.cache.has('785201531656994837'))) {
         await member.roles.remove('796889400667275324')
             .then(async () => {
-                await member.createDM().catch()
+                await member.createDM().catch(() => {})
                 await member.send({
                     embeds: [
                         new MessageEmbed()
                             .setTitle('Uh oh!')
                             .setColor('#b8130d')
-                            .setDescription("You can't the role 'No Partnership'. If you have the 'Partner' or 'Partnered Heist' roles, please remove these roles and try again.")
+                            .setDescription("You can't receive the role 'No Partnership'. If you have the 'Partner' or 'Partnered Heist' roles, please remove these roles and try again.")
                             .setTimestamp()
                         ]
-                }).catch()
+                }).catch(() => {})
 
-            }).catch()
+            }).catch(() => {})
         
-        await e.users.remove(usr.id).catch()
+        await e.users.remove(usr.id).catch(() => {})
         return
     } else if ((e.emoji.id == '936156459442536458' || e.emoji.id == '861300228803002368') && member.roles.cache.has('796889400667275324')) {
         try {
@@ -36,7 +36,7 @@ collector.on('collect', async (e, usr) => {
             // do nothing
             return
         } finally {
-            await member.createDM().catch()
+            await member.createDM().catch(() => {})
             await member.send({
                 embeds: [
                     new MessageEmbed()
@@ -45,9 +45,9 @@ collector.on('collect', async (e, usr) => {
                         .setDescription(`You can't receive the ${e.emoji.id == '936156459442536458' ? "'Partner'" : "'Partnered Heist'" } role. If you have the 'No Partnership' role, please remove that role and try again.`)
                         .setTimestamp()
                 ]
-            }).catch()
+            }).catch(() => {})
 
-            await e.users.remove(usr.id).catch()
+            await e.users.remove(usr.id).catch(() => {})
         }
 
         return
