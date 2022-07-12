@@ -1,0 +1,9 @@
+cd prod_safe
+npm i
+npm update
+
+@run.cmd=node index.js
+@git.auto_push=true
+@git.auto_push_interval=20
+@run.keepalive_http_server=true
+@replit.enable_bot_patch=true
