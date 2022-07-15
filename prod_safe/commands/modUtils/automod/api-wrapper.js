@@ -48,7 +48,6 @@ export async function analyzeComment(text, key, options) {
         key: key
     });
     const p = JSON.parse(req);
-    console.log(JSON.stringify(p))
     if (p.error)
         throw new Error(p.error);
     else
