@@ -22,7 +22,7 @@ export async function execute(i) {
     const fButtonI = `polly-pressf_${randomUUID()}`, filter = button => button.customId == fButtonI, pressedF = new Array(), buttonRow = new MessageActionRow()
         .addComponents(new MessageButton()
         .setCustomId(fButtonI)
-        .setEmoji('934709098992242758')
+        .setEmoji('996958179692920963')
         .setStyle('PRIMARY')), collector = i.channel.createMessageComponentCollector({ componentType: 'BUTTON', time: 60 * 1000, filter: filter });
     const msg = await i.channel.send({
         content: `Everyone, let's pay respects to ${i.options.getString('reason')}! Press the button to pay respects to our fallen solider <:salute:934716403376853002>`,
@@ -46,7 +46,7 @@ export async function execute(i) {
                     new MessageActionRow()
                         .addComponents(new MessageButton()
                         .setCustomId(fButtonI)
-                        .setEmoji('934709098992242758')
+                        .setEmoji('996958179692920963')
                         .setStyle(pressedF.length > 0 ? 'SUCCESS' : 'DANGER')
                         .setDisabled(true))
                 ]
