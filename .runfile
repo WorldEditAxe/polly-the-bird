@@ -1,5 +1,4 @@
 cd prod_safe && npm i
-cd prod_safe && npm update
 
 @run.cmd=cd prod_safe && node index.js
 @git.auto_push=true
