@@ -10,7 +10,13 @@ import { preprocess } from "./lib/preprocessor/preprocessor.js";
 import { init } from "./lib/preprocessor/cooldownDb.js";
 dotenv.config();
 export const cooldownMap = new Map();
-const client = new Client({ intents: [new Intents(32767)] });
+const client = new Client({
+    intents: [new Intents(32767)],
+    allowedMentions: {
+        repliedUser: true,
+        parse: []
+    }
+});
 let token = process.env.TOKEN, devGuildId = process.env.DEV_GUILD_ID, isProd = process.env.IS_PRODUCTION, cooldownDbType = (_a = process.env.COOLDOWN_DB_TYPE) !== null && _a !== void 0 ? _a : 'SQLITE', cooldownDbUri = process.env.COOLDOWN_DB_URI;
 const snooze = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const logger = new Logger("INDEX");
