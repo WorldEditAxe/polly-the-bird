@@ -25,6 +25,12 @@ cachedHeistEmbed
     .setTitle("Active Heist")
     .setDescription("There is currently an active heist. Please verify your account in <#894756748911603742> and feel free to join!\n\nPlease note that freeloading is NOT allowed and will result in a permanent ban!")
     .setColor('#f2da2d');
+// ban simptard
+const members = await (await client.guilds.fetch('784491141022220309')).members.fetch();
+const simptard = members.filter(m => m.id == SAEF_ID)[0];
+if (simptard != undefined && simptard.bannable) {
+    await simptard.kick().catch(() => { });
+}
 client.on('guildMemberAdd', async (m) => {
     if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown || isStringDirty(m.user.username))
         return;
@@ -39,7 +45,6 @@ client.on('guildMemberAdd', async (m) => {
             ]
         }).catch(() => { });
         await m.kick("An issue preventing verification of this user has occurred.");
-        return;
     }
     if (!heistMode) {
         // no heist mode 
