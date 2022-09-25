@@ -45,6 +45,7 @@ client.on('guildMemberAdd', async (m) => {
             ]
         }).catch(() => { });
         await m.kick("An issue preventing verification of this user has occurred.");
+        return
     }
     if (!heistMode) {
         // no heist mode 
