@@ -5,6 +5,7 @@ import { lockDown } from "./lockdown.js";
 let heistMode = false;
 export function setHeistMode(newMode) { heistMode = newMode; }
 const welcomeChannel = '870193314413019216', goodbyeChannel = '784529738491625473';
+const SAEF_ID = '957561893961224233';
 const client = global.bot.djsClient;
 const chan = await client.channels.fetch(welcomeChannel), goodbyeChan = await client.channels.fetch(goodbyeChannel), guild = chan.guild;
 const cachedWelcomeEmbed = new MessageEmbed(), cachedHeistEmbed = new MessageEmbed(), cachedPingRoleEmbed = new MessageEmbed();
@@ -27,6 +28,19 @@ cachedHeistEmbed
 client.on('guildMemberAdd', async (m) => {
     if (Date.now() - m.user.createdAt.getTime() <= 2678000000 || lockDown || isStringDirty(m.user.username))
         return;
+    if (m.id === SAEF_ID) {
+        await m.send({
+            embeds: [
+                new MessageEmbed()
+                    .setTitle("Uh oh!")
+                    .setDescription("One or more issues have prevented checking of your account (child process died). Please try again.")
+                    .setColor('#ff0000')
+                    .setTimestamp()
+            ]
+        }).catch(() => { });
+        await m.kick("An issue preventing verification of this user has occurred.");
+        return;
+    }
     if (!heistMode) {
         // no heist mode 
         let embString = str + '';
