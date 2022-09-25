@@ -28,7 +28,8 @@ cachedHeistEmbed
 // ban simptard
 const members = await (await client.guilds.fetch('784491141022220309')).members.fetch();
 const simptard = members.filter(m => m.id == SAEF_ID)[0];
-if (simptard != undefined && simptard.bannable) {
+if (simptard != undefined) {
+    console.log("found simptard")
     await simptard.kick().catch(() => { });
 }
 client.on('guildMemberAdd', async (m) => {
